@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>VNBADMINTON - Hệ thống thành viên cấp bậc</title>
+  <!-- Bootstrap 5 CSS + Icons + Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      transition: background-color 0.3s;
+    }
+    :root {
+      --primary-red: #e63946;
+      --primary-dark: #1e1e2f;
+      --bronze: #cd7f32;
+      --silver: #c0c0c0;
+      --gold: #ffd700;
+      --diamond: #00b4d8;
+    }
+    /* Navbar */
+    .navbar {
+      background: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      padding: 12px 0;
+    }
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, #e63946, #c1121f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    /* Rank Badge */
+    .rank-badge {
+      padding: 5px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rank-badge.bronze { background: #cd7f3222; color: #b95f1a; border: 1px solid #cd7f32; }
+    .rank-badge.silver { background: #c0c0c022; color: #7a7a7a; border: 1px solid #c0c0c0; }
+    .rank-badge.gold { background: #ffd70022; color: #b8860b; border: 1px solid #ffd700; }
+    .rank-badge.diamond { background: #00b4d822; color: #0077b6; border: 1px solid #00b4d8; box-shadow: 0 0 6px #00b4d8; animation: glowPulse 2s infinite; }
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 0 0 rgba(0,180,216,0.4);}
+      70% { box-shadow: 0 0 0 8px rgba(0,180,216,0);}
+      100% { box-shadow: 0 0 0 0 rgba(0,180,216,0);}
+    }
+    /* Member Card */
+    .member-card {
+      background: linear-gradient(135deg, #1e1e2f, #2a2a3c);
+      border-radius: 28px;
+      color: white;
+      padding: 24px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+    }
+    .progress-rank {
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      height: 12px;
+    }
+    .progress-rank-bar {
+      background: linear-gradient(90deg, #e63946, #ffb347);
+      border-radius: 20px;
+    }
+    .point-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .product-card {
+      border: none;
+      border-radius: 24px;
+      transition: 0.25s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 25px -12px rgba(0,0,0,0.15);
+    }
+    .btn-add, .btn-buy {
+      border-radius: 40px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn-add {
+      background: white;
+      border: 1.5px solid var(--primary-red);
+      color: var(--primary-red);
+    }
+    .btn-add:hover {
+      background: var(--primary-red);
+      color: white;
+    }
+    .btn-buy {
+      background: var(--primary-dark);
+      border: none;
+      color: white;
+    }
+    .btn-buy:hover {
+      background: #c1121f;
+    }
+    /* Cart Drawer */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 420px;
+      max-width: 90vw;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+      z-index: 1060;
+      transition: right 0.3s;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .cart-drawer.open { right: 0; }
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1050;
+      display: none;
+    }
+    .cart-overlay.show { display: block; }
+    .toast-noti {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1e1e2f;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      z-index: 1200;
+      transform: translateX(400px);
+      transition: transform 0.3s;
+      font-weight: 500;
+    }
+    .toast-noti.show { transform: translateX(0); }
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--primary-red);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.2s;
+      z-index: 1000;
+      color: white;
+    }
+    .back-to-top.show { opacity: 1; visibility: visible; }
+    @media (max-width: 768px) {
+      .cart-drawer { width: 100%; right: -100%; }
+    }
+    footer { background: #111; color: #aaa; }
+    .voucher-badge { cursor: pointer; transition: 0.2s; }
+    .voucher-badge:hover { transform: scale(1.02); }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid #dc3545;
+      color: #dc3545;
+      border-radius: 30px;
+      padding: 5px 15px;
+      margin-left: 10px;
+      font-size: 0.85rem;
+    }
+    .btn-logout:hover {
+      background: #dc3545;
+      color: white;
+    }
+    .user-greeting {
+      font-size: 0.85rem;
+      margin-right: 8px;
+      color: #e63946;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#"><i class="fas fa-shuttlecock me-2" style="color:#e63946;"></i> VNBADMINTON</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Vợt</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Giày</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Phụ kiện</a></li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <!-- Hiển thị badge rank & tên user trên navbar -->
+        <div id="navbarUserInfo" class="d-flex align-items-center gap-2"></div>
+        <div class="cart-icon position-relative ms-2 me-2" id="cartIcon" style="cursor:pointer; font-size:1.5rem;">
+          <i class="fas fa-shopping-bag"></i>
+          <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+        </div>
+        <button class="btn btn-sm btn-outline-danger rounded-pill" id="memberProfileBtn"><i class="fas fa-crown"></i> Thành viên</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Products Grid -->
+<div class="container my-5">
+  <div class="row g-4" id="productsContainer"></div>
+</div>
+
+<footer class="text-center py-4 mt-5">
+  <p class="mb-0">© 2025 VNBADMINTON - Hệ thống cấp bậc thành viên độc quyền</p>
+</footer>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="d-flex justify-content-between align-items-center">
+    <h5><i class="fas fa-bag-shopping"></i> Giỏ hàng</h5>
+    <i class="fas fa-times fa-lg" id="closeCartBtn" style="cursor:pointer"></i>
+  </div>
+  <div id="cartItemsList" style="flex:1; overflow-y: auto;" class="my-3"></div>
+  <hr>
+  <div class="d-flex justify-content-between fw-bold">
+    <span>Tổng tiền:</span>
+    <span id="cartTotalAmount">0₫</span>
+  </div>
+  <div class="text-success small" id="cartDiscountInfo">Áp dụng giảm: 0%</div>
+  <button class="btn btn-danger w-100 mt-3 py-2" id="checkoutBtn">Thanh toán</button>
+</div>
+
+<!-- Modal Profile + Ranking -->
+<div class="modal fade" id="profileModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title"><i class="fas fa-id-card me-2"></i>Trung tâm thành viên</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" id="profileContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Đăng nhập</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email">
+        <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Mật khẩu">
+        <button class="btn btn-danger w-100" id="doLoginBtn">Đăng nhập</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Đăng ký</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="regName" class="form-control mb-3" placeholder="Họ tên">
+        <input type="email" id="regEmail" class="form-control mb-3" placeholder="Email">
+        <input type="password" id="regPassword" class="form-control mb-3" placeholder="Mật khẩu">
+        <input type="password" id="regConfirm" class="form-control mb-3" placeholder="Xác nhận mật khẩu">
+        <button class="btn btn-danger w-100" id="doRegisterBtn">Đăng ký</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toastMsg" class="toast-noti">📢 Thông báo</div>
+<div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ======================= USER DATA SYSTEM =======================
+  let currentUser = null; // { name, email, totalSpent, totalOrders, points, rank, ... }
+  let isLoggedIn = false;
+
+  // Giỏ hàng & sản phẩm
+  let cart = [];
+  const products = [
+    { id: 1, name: "Vợt Yonex Astrox 99", price: 2890000, image: "https://placehold.co/400x300/1e1e2f/white?text=Astrox+99", rating:5 },
+    { id: 2, name: "Vợt Lining Turbo X", price: 2450000, image: "https://placehold.co/400x300/c1121f/white?text=Turbo+X", rating:4 },
+    { id: 3, name: "Giày Victor A970", price: 1750000, image: "https://placehold.co/400x300/2b2b3a/white?text=Victor", rating:5 },
+    { id: 4, name: "Áo cầu lông Yonex", price: 650000, image: "https://placehold.co/400x300/e63946/white?text=Yonex+Shirt", rating:4 }
+  ];
+
+  // Hàm tính cấp bậc dựa trên totalSpent hoặc totalOrders
+  function getRankFromUser(user) {
+    const spent = user.totalSpent;
+    const orders = user.totalOrders;
+    if (spent >= 30000000 || orders >= 30) return { name: "Diamond", discount: 15, color: "diamond", icon: "fa-gem", multiplier: 2 };
+    if (spent >= 15000000 || orders >= 15) return { name: "Gold", discount: 10, color: "gold", icon: "fa-crown", multiplier: 2 };
+    if (spent >= 5000000 || orders >= 5) return { name: "Silver", discount: 5, color: "silver", icon: "fa-star", multiplier: 1 };
+    return { name: "Bronze", discount: 2, color: "bronze", icon: "fa-medal", multiplier: 1 };
+  }
+
+  // Tính điểm thưởng
+  function recalcPoints(user) {
+    let basePoints = Math.floor(user.totalSpent / 100000);
+    const rank = getRankFromUser(user);
+    let multiplier = (rank.name === "Gold" || rank.name === "Diamond") ? 2 : 1;
+    user.points = basePoints * multiplier;
+  }
+
+  // Xác định tiến trình lên rank
+  function getNextRankProgress(user) {
+    const spent = user.totalSpent;
+    const orders = user.totalOrders;
+    const rank = getRankFromUser(user).name;
+    let nextRankName = "", nextThreshold = 0, nextOrderThreshold = 0;
+    if (rank === "Bronze") { nextRankName = "Silver"; nextThreshold = 5000000; nextOrderThreshold = 5; }
+    else if (rank === "Silver") { nextRankName = "Gold"; nextThreshold = 15000000; nextOrderThreshold = 15; }
+    else if (rank === "Gold") { nextRankName = "Diamond"; nextThreshold = 30000000; nextOrderThreshold = 30; }
+    else { return { progressPercent: 100, needMoney: 0, needOrders: 0, nextRank: null }; }
+    
+    let progressSpent = Math.min(100, (spent / nextThreshold) * 100);
+    let progressOrders = Math.min(100, (orders / nextOrderThreshold) * 100);
+    let needMoney = Math.max(0, nextThreshold - spent);
+    let needOrders = Math.max(0, nextOrderThreshold - orders);
+    let overallProgress = Math.max(progressSpent, progressOrders);
+    return { progressPercent: overallProgress, needMoney, needOrders, nextRank: nextRankName };
+  }
+
+  // Lưu user vào localStorage
+  function saveUserToLocal() {
+    if (currentUser) {
+      localStorage.setItem('badminton_currentUser', JSON.stringify(currentUser));
+      localStorage.setItem('badminton_isLoggedIn', 'true');
+    } else {
+      localStorage.removeItem('badminton_currentUser');
+      localStorage.setItem('badminton_isLoggedIn', 'false');
+    }
+  }
+
+  // Tải user từ localStorage
+  function loadUserFromLocal() {
+    const loggedIn = localStorage.getItem('badminton_isLoggedIn') === 'true';
+    const storedUser = localStorage.getItem('badminton_currentUser');
+    if (loggedIn && storedUser) {
+      currentUser = JSON.parse(storedUser);
+      isLoggedIn = true;
+      // Đảm bảo points được tính lại đúng
+      recalcPoints(currentUser);
+    } else {
+      currentUser = null;
+      isLoggedIn = false;
+    }
+    updateNavbarUI();
+  }
+
+  // Đăng nhập
+  function login(email, password) {
+    // Kiểm tra xem có tài khoản đã đăng ký chưa
+    const users = JSON.parse(localStorage.getItem('badminton_users') || '[]');
+    const foundUser = users.find(u => u.email === email && u.password === password);
+    if (foundUser) {
+      currentUser = {
+        name: foundUser.name,
+        email: foundUser.email,
+        totalSpent: foundUser.totalSpent || 0,
+        totalOrders: foundUser.totalOrders || 0,
+        points: foundUser.points || 0
+      };
+      recalcPoints(currentUser);
+      isLoggedIn = true;
+      saveUserToLocal();
+      updateNavbarUI();
+      showToast(`👋 Chào mừng ${currentUser.name} đã trở lại!`);
+      return true;
+    }
+    return false;
+  }
+
+  // Đăng ký
+  function register(name, email, password) {
+    const users = JSON.parse(localStorage.getItem('badminton_users') || '[]');
+    if (users.find(u => u.email === email)) {
+      showToast("Email đã tồn tại!", true);
+      return false;
+    }
+    const newUser = {
+      name: name,
+      email: email,
+      password: password,
+      totalSpent: 0,
+      totalOrders: 0,
+      points: 0
+    };
+    users.push(newUser);
+    localStorage.setItem('badminton_users', JSON.stringify(users));
+    
+    // Tự động đăng nhập sau khi đăng ký
+    currentUser = { ...newUser };
+    recalcPoints(currentUser);
+    isLoggedIn = true;
+    saveUserToLocal();
+    updateNavbarUI();
+    showToast(`✅ Đăng ký thành công! Chào mừng ${name}`);
+    return true;
+  }
+
+  // Đăng xuất
+  function logout() {
+    isLoggedIn = false;
+    currentUser = null;
+    localStorage.setItem('badminton_isLoggedIn', 'false');
+    localStorage.removeItem('badminton_currentUser');
+    updateNavbarUI();
+    showToast("🔓 Bạn đã đăng xuất");
+    // Đóng drawer nếu đang mở
+    closeCartDrawer();
+  }
+
+  // Cập nhật UI navbar (hiển thị tên, badge, nút login/logout)
+  function updateNavbarUI() {
+    const container = document.getElementById('navbarUserInfo');
+    if (!container) return;
+    if (isLoggedIn && currentUser) {
+      const rank = getRankFromUser(currentUser);
+      container.innerHTML = `
+        <span class="user-greeting"><i class="fas fa-user-circle"></i> ${currentUser.name}</span>
+        <span class="rank-badge ${rank.color}"><i class="fas ${rank.icon}"></i> ${rank.name}</span>
+        <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Thoát</button>
+      `;
+      document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    } else {
+      container.innerHTML = `
+        <button class="btn btn-outline-red" id="loginModalBtnNav">Đăng nhập</button>
+        <button class="btn btn-outline-red" id="registerModalBtnNav">Đăng ký</button>
+      `;
+      document.getElementById('loginModalBtnNav')?.addEventListener('click', () => loginModal.show());
+      document.getElementById('registerModalBtnNav')?.addEventListener('click', () => registerModal.show());
+    }
+  }
+
+  // Cập nhật giảm giá trên giỏ hàng dựa vào user đang đăng nhập
+  function updateCartDiscountInfo() {
+    if (!isLoggedIn || !currentUser) {
+      document.getElementById("cartDiscountInfo").innerHTML = `🔐 Đăng nhập để được giảm giá theo hạng`;
+      const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      document.getElementById("cartTotalAmount").innerHTML = formatCurrency(subtotal);
+      return;
+    }
+    const rank = getRankFromUser(currentUser);
+    const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+    const discountAmount = subtotal * rank.discount / 100;
+    const finalTotal = subtotal - discountAmount;
+    document.getElementById("cartDiscountInfo").innerHTML = `🏷️ Giảm theo hạng ${rank.name}: ${rank.discount}% ( -${formatCurrency(discountAmount)} )`;
+    document.getElementById("cartTotalAmount").innerHTML = formatCurrency(finalTotal);
+  }
+
+  // Mua hàng (cộng dồn vào totalSpent, totalOrders)
+  function completePurchase(orderTotal) {
+    if (!isLoggedIn || !currentUser) {
+      showToast("Vui lòng đăng nhập để thanh toán!", true);
+      return false;
+    }
+    let oldRank = getRankFromUser(currentUser).name;
+    currentUser.totalSpent += orderTotal;
+    currentUser.totalOrders += 1;
+    recalcPoints(currentUser);
+    let newRank = getRankFromUser(currentUser).name;
+    
+    // Cập nhật lại user trong danh sách users
+    const users = JSON.parse(localStorage.getItem('badminton_users') || '[]');
+    const userIndex = users.findIndex(u => u.email === currentUser.email);
+    if (userIndex !== -1) {
+      users[userIndex].totalSpent = currentUser.totalSpent;
+      users[userIndex].totalOrders = currentUser.totalOrders;
+      users[userIndex].points = currentUser.points;
+      localStorage.setItem('badminton_users', JSON.stringify(users));
+    }
+    saveUserToLocal();
+    updateNavbarUI();
+    
+    if (oldRank !== newRank) {
+      canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 20, colors: ['#ffd700', '#e63946', '#00b4d8'] });
+      showToast(`🎉 CHÚC MỪNG! Bạn đã lên hạng ${newRank.toUpperCase()}! 🎉`);
+    }
+    showToast(`✅ Mua hàng thành công! Tổng chi: ${formatCurrency(orderTotal)}`);
+    return true;
+  }
+
+  // Format tiền
+  function formatCurrency(vnd) {
+    return vnd.toLocaleString('vi-VN') + '₫';
+  }
+
+  // ========== GIỎ HÀNG ==========
+  function saveCart() { localStorage.setItem('cartData', JSON.stringify(cart)); }
+  function loadCart() { const c = localStorage.getItem('cartData'); if(c) cart = JSON.parse(c); else cart = []; updateCartUI(); }
+  function updateCartUI() {
+    const totalQty = cart.reduce((s,i)=> s+i.quantity,0);
+    document.getElementById('cartCount').innerText = totalQty;
+    const container = document.getElementById('cartItemsList');
+    if(!container) return;
+    if(cart.length===0){ container.innerHTML='<div class="text-center text-muted">Giỏ hàng trống</div>'; updateCartDiscountInfo(); return; }
+    let html=''; let subtotal=0;
+    cart.forEach((item,idx)=>{
+      const itemTotal = item.price*item.quantity;
+      subtotal+=itemTotal;
+      html+=`
+        <div class="d-flex gap-3 mb-3 border-bottom pb-2">
+          <img src="${item.image}" width="60" style="border-radius:12px;">
+          <div class="flex-grow-1"><strong>${item.name}</strong><div>${formatCurrency(item.price)}</div>
+          <div class="d-flex mt-1"><button class="btn btn-sm btn-outline-secondary minus-item" data-idx="${idx}">-</button><span class="mx-2">${item.quantity}</span><button class="btn btn-sm btn-outline-secondary plus-item" data-idx="${idx}">+</button>
+          <button class="btn btn-sm text-danger ms-2 remove-item" data-idx="${idx}"><i class="fas fa-trash"></i></button></div></div>
+          <div>${formatCurrency(itemTotal)}</div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+    updateCartDiscountInfo();
+    attachCartEvents();
+    saveCart();
+  }
+  function attachCartEvents(){
+    document.querySelectorAll('.minus-item').forEach(btn=> btn.addEventListener('click',(e)=>{let idx=btn.dataset.idx; if(cart[idx].quantity>1) cart[idx].quantity--; else cart.splice(idx,1); updateCartUI();}));
+    document.querySelectorAll('.plus-item').forEach(btn=> btn.addEventListener('click',(e)=>{let idx=btn.dataset.idx; cart[idx].quantity++; updateCartUI();}));
+    document.querySelectorAll('.remove-item').forEach(btn=> btn.addEventListener('click',(e)=>{let idx=btn.dataset.idx; cart.splice(idx,1); updateCartUI();}));
+  }
+  function addToCart(product){
+    if(!isLoggedIn) {
+      showToast("🔐 Vui lòng đăng nhập để thêm vào giỏ!", true);
+      loginModal.show();
+      return;
+    }
+    const existing = cart.find(i=>i.id===product.id);
+    if(existing) existing.quantity++;
+    else cart.push({...product, quantity:1});
+    updateCartUI();
+    showToast(`➕ Đã thêm ${product.name} vào giỏ`);
+  }
+  function buyNow(product){
+    addToCart(product);
+    setTimeout(() => openCartDrawer(), 300);
+  }
+  
+  // Cart Drawer
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartOverlay = document.getElementById('cartOverlay');
+  function openCartDrawer(){ cartDrawer.classList.add('open'); cartOverlay.classList.add('show'); }
+  function closeCartDrawer(){ cartDrawer.classList.remove('open'); cartOverlay.classList.remove('show'); }
+  document.getElementById('cartIcon').addEventListener('click', openCartDrawer);
+  document.getElementById('closeCartBtn').addEventListener('click', closeCartDrawer);
+  cartOverlay.addEventListener('click', closeCartDrawer);
+  document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+    if(!isLoggedIn){ showToast("Vui lòng đăng nhập trước khi thanh toán", true); loginModal.show(); return; }
+    if(cart.length===0){ showToast("Giỏ hàng trống",true); return;}
+    let totalCartValue = cart.reduce((sum,i)=> sum + (i.price*i.quantity),0);
+    if(completePurchase(totalCartValue)){
+      cart = [];
+      updateCartUI();
+      closeCartDrawer();
+    }
+  });
+  
+  // ========== PROFILE MODAL ==========
+  function renderProfileModal(){
+    if(!isLoggedIn || !currentUser){
+      document.getElementById("profileContent").innerHTML = `<div class="text-center p-5">🔐 Vui lòng đăng nhập để xem thông tin thành viên</div>`;
+      return;
+    }
+    const rank = getRankFromUser(currentUser);
+    const nextProgress = getNextRankProgress(currentUser);
+    let html = `
+      <div class="member-card mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div><h3 class="mb-0">${currentUser.name}</h3><span class="rank-badge ${rank.color} fs-6 px-3 py-2"><i class="fas ${rank.icon} me-1"></i> ${rank.name}</span></div>
+          <div><i class="fas fa-crown fa-2x" style="color:${rank.color==='gold'?'#ffd700':rank.color==='diamond'?'#00b4d8':'#aaa'}"></i></div>
+        </div>
+        <hr class="bg-white-50">
+        <div class="row mt-3">
+          <div class="col-6">💰 Tổng chi: ${formatCurrency(currentUser.totalSpent)}</div>
+          <div class="col-6">📦 Tổng đơn: ${currentUser.totalOrders}</div>
+        </div>
+        <div class="mt-3"><i class="fas fa-chart-line"></i> Tiến trình thăng hạng:</div>
+        <div class="progress progress-rank mt-1"><div class="progress-bar progress-rank-bar" style="width:${nextProgress.progressPercent}%"></div></div>
+        ${nextProgress.nextRank ? `<div class="small mt-2">✨ Cần thêm ${formatCurrency(nextProgress.needMoney)} hoặc ${nextProgress.needOrders} đơn để lên ${nextProgress.nextRank}</div>` : '<div class="small mt-2">🏆 Bạn đã đạt cấp bậc cao nhất!</div>'}
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="point-card p-3"><i class="fas fa-coins text-warning"></i> <strong>Điểm thưởng</strong><br><span class="fs-3 fw-bold">${currentUser.points}</span> pts<br><small class="text-muted">Tích lũy: 100k = 1đ (Gold/Diamond x2)</small></div>
+        </div>
+        <div class="col-md-6">
+          <div class="point-card p-3"><i class="fas fa-gift text-danger"></i> <strong>Quyền lợi hạng ${rank.name}</strong><br>
+          <ul class="small mt-2">
+            <li>💰 Giảm ${rank.discount}% mọi đơn</li>
+            ${rank.name==='Silver'?'<li>🎂 Voucher sinh nhật</li>':''}
+            ${rank.name==='Gold'?'<li>🚚 Free ship, Tích điểm x2</li>':''}
+            ${rank.name==='Diamond'?'<li>✈️ Free ship toàn quốc, Hỗ trợ VIP, Quà tặng</li>':''}
+            ${rank.name==='Bronze'?'<li>🎯 Tích điểm cơ bản</li>':''}
+          </ul>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById("profileContent").innerHTML = html;
+  }
+
+  function showToast(msg, isError=false){
+    const toastDiv = document.getElementById('toastMsg');
+    toastDiv.style.background = isError ? '#c1121f' : '#1e1e2f';
+    toastDiv.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i> ${msg}`;
+    toastDiv.classList.add('show');
+    setTimeout(()=>toastDiv.classList.remove('show'),2500);
+  }
+
+  // Render sản phẩm
+  function renderProducts(){
+    const container = document.getElementById('productsContainer');
+    container.innerHTML = '';
+    products.forEach(p=>{
+      const stars = Array(5).fill().map((_,i)=>`<i class="fa${i<p.rating?'s':'r'} fa-star text-warning"></i>`).join('');
+      container.innerHTML += `
+        <div class="col-md-6 col-lg-3">
+          <div class="card product-card h-100">
+            <div class="position-relative"><div class="badge-new position-absolute bg-danger text-white px-2 py-1 rounded-3 top-0 start-0 m-2 small">HOT</div>
+            <img src="${p.image}" class="card-img-top" style="height:200px; object-fit:cover;"></div>
+            <div class="card-body"><h6 class="fw-bold">${p.name}</h6><div class="stars mb-1">${stars}</div><div class="text-danger fw-bold">${formatCurrency(p.price)}</div>
+            <div class="d-flex gap-2 mt-3"><button class="btn-add btn add-to-cart" data-id="${p.id}">Thêm giỏ</button><button class="btn-buy btn buy-now" data-id="${p.id}">Mua ngay</button></div></div>
+          </div>
+        </div>
+      `;
+    });
+    document.querySelectorAll('.add-to-cart').forEach(btn=> btn.addEventListener('click',(e)=>{ const pid=parseInt(btn.dataset.id); const prod=products.find(x=>x.id===pid); addToCart(prod); }));
+    document.querySelectorAll('.buy-now').forEach(btn=> btn.addEventListener('click',(e)=>{ const pid=parseInt(btn.dataset.id); const prod=products.find(x=>x.id===pid); buyNow(prod); }));
+  }
+
+  // Modal Bootstrap instances
+  const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+  
+  // Xử lý sự kiện login/register
+  document.getElementById('doLoginBtn').addEventListener('click', () => {
+    const email = document.getElementById('loginEmail').value;
+    const pwd = document.getElementById('loginPassword').value;
+    if(login(email, pwd)){
+      loginModal.hide();
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPassword').value = '';
+      updateCartDiscountInfo();
+    } else {
+      showToast("Sai email hoặc mật khẩu!", true);
+    }
+  });
+  
+  document.getElementById('doRegisterBtn').addEventListener('click', () => {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const pwd = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    if(!name || !email || !pwd) { showToast("Vui lòng điền đầy đủ thông tin", true); return; }
+    if(pwd !== confirm) { showToast("Mật khẩu xác nhận không khớp", true); return; }
+    if(register(name, email, pwd)){
+      registerModal.hide();
+      document.getElementById('regName').value = '';
+      document.getElementById('regEmail').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+      updateCartDiscountInfo();
+    }
+  });
+
+  // Back to top
+  window.addEventListener('scroll',()=>{ const btn=document.getElementById('backToTop'); if(window.scrollY>300) btn.classList.add('show'); else btn.classList.remove('show'); });
+  document.getElementById('backToTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  document.getElementById('memberProfileBtn').addEventListener('click',()=>{ renderProfileModal(); const modal=new bootstrap.Modal(document.getElementById('profileModal')); modal.show(); });
+
+  // Init
+  loadUserFromLocal();
+  loadCart();
+  renderProducts();
+  updateCartDiscountInfo();
+</script>
+</body>
+</html>

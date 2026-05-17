@@ -1,0 +1,31 @@
+/* CSS cho carousel để tránh bể khung */
+.caroulsel-wrapper {
+    width: 100%;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.carousel {
+    width: 100%;
+}
+
+.carousel .carousel-inner {
+    height: 400px;
+    width: 100%;
+}
+
+.carousel-item {
+    height: 400px;
+    width: 100%;
+}
+
+.carousel-item img {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Các style khác nếu cần */

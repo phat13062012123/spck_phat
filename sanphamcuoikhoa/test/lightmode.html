@@ -1,0 +1,45 @@
+<input type="checkbox" id="theme-toggle" hidden>
+<label for="theme-toggle" class="toggle">🌙</label>
+
+<div class="page">
+  <h1>Hello World</h1>
+  <p>Dark / Light Mode</p>
+</div>
+<style>/* Light mode */
+.page {
+  background: white;
+  color: black;
+  min-height: 100vh;
+  transition: 0.3s;
+}
+
+/* Khi checkbox được check → dark mode */
+#theme-toggle:checked ~ .page {
+  background: #121212;
+  color: white;
+}
+
+/* Nút bấm */
+.toggle {
+  cursor: pointer;
+  font-size: 24px;
+}
+</style>
+<script>
+  const button = document.getElementById("toggle-theme");
+
+  // Khi load trang
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+  }
+
+  button.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+    } else {
+      localStorage.setItem("theme", "light");
+    }
+  });
+</script>

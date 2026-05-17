@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="sanphamcuoikhoa\web.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <title>Document</title>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <img src="./img/brandimg.png" id="logo" alt="Logo">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mua sắm
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Vợt cầu lông</a></li>
+                <li><a class="dropdown-item" href="#">Giày cầu lông</a></li>
+                <li><a class="dropdown-item" href="#">Quần & Áo cầu lông</a></li>
+                <li><a class="dropdown-item" href="#">Balo & Túi vợt</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Phụ kiện cầu lông</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="http://127.0.0.1:5500/sanphamcuoikhoa/tranglienhe.html">Liên Hệ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Pro</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Tìm sản phẩm....." aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+  <div class="caroulsel-wrapper">
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATcAAACiCAMAAAATIHpEAAABC1BMVEWkERn46OifAACnERekERr85uv26+vuysqeAAD56+iiAACnABehAAWaAACiBRD+8PHMfIKxR0jsz82+bm3EeXmnEBreqqr56u6gEhj67+22Tk6TAAD/7u/35unz6uiiAAuqPkGtMznIg4X57/XcpaHarq763uPnuLLVl5fEaG397eicEBqfFBT/3djPi4itCBisS068YGH49fX///riv7/66vTq1te1S1Pju8LXk5i1YF6oJy+uNz7qtLnv9e/an6K/WVmlLS+iIiLMlJDcsbTUhoTevLnfs7y8Z3DAYGjHeHfwy8Txxc7GcXy5V1+1b2v91dLXp56qOTjHkJ3u3869R1LIbWudJjL+2OMrxauWAAALg0lEQVR4nO2bf1ubyBbHgRkmMMKgRDKg/DCh1ZigadIk1sYaq123ta27vXe7d9//K7lDDAQroe293erG83n6R58MicyXM2fOOXOQJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvsZa10UIl41gJzEixsS/EpC4AElYQij5yTf8IMBo++BQcct1c3vPNpawM8GGQo0IYVz63VUH0/7AdhKnbEyY4fPnzwcD3/etO8hje9iuN6k2s7xHBzLfj6yXRumYK6GdnaPNS08ukormyzLnXCZWMG43NfaT7/khYBx5sl5Tlg0LR2Zo9WCUiRbIdns6bQx3g5gHgSo+8fwXW9RIHd3PvO17h+4RMfetqOISRI9Pc918myqCbdxvdMJQfEBC39praqh8qa8qbCfkYu5PlxpcCn3pBXPdiFozHJzuBQY9qvl6+pE8Cg82KXs824OIM+jUU/VA9Saswlyik8zcSMBrdLYgEXKZ++p0tnRD4eimJnLwI1mq2Ikmu2Lmoey3lfIQbnYZa+Y7g0pqiz0Ebe/5c0MMBg2auMnjEA679NCbrTRZnixfZ5hN5FLdHBaNeeb4Ths0Kg8DVw6cmLszeyEhadHu0svQmqyX6Sa59Gw+0JG519Ieyd6A6f5grge32dIoTOiml9qbQGnEeYxCjoxHknIpNZLp4dXpsquqdGM7ehBmg/ba4/Bvxj4Jcj2G5rLLqnSTlL1FNuG1KsOZFcFF2jAOcoOzNpbFvpW6GfsDNRvjB13k/v03fs+40TM5zOasq3GDuuUloUrdHJZLH4R+S/zGT7n5ewRpDV8Pc91ka5JI5eWkKt3w9qtMNyKHtolWXrekKfNgN1dEjtvakvJlpW702Mp0I7J3FK36Qk3Mthc/PfQCniuHy8OISt1QdBbnPyDzY7rqoS/CB2H8+XWHqJkoVouWLrJq3aRzq6Dbh6W78qqgtTw+pLThZVuDTOzyxLxSN7GjLmSTycH5avs3jOgB9/tKdKTnMRz390vrvl/RjdoF4fSjqkrePx7UpXWu28yRlA+nucHxPa1sO6zWzdGGZKEbX552rAJI0uwRWTdcZNTzeD8IO0e9kvirWjdMLwu6xeurrJtYpX0e7opUnkmKvZi21zBLjgkqdXMxfVrU7XildUvokHttBafmcliII9Rzdjf+qrY3pBR00+Mnq5yiOtGOyjuT9L+YdQtu3Tosmfb36MZXWjdJ+eTzJ7MVhSX6ZDFvIrt3c4bv0E2e/+qKwiYdbp3cpESInSwqQQHfvDvv79Lt4sfq5mKMH0gROUEubXvhK5q5MuUND3Jh7Ltl3+p8waFvivtC60fq5iLkPJj2EyShtd2R1Y+ybDS6DrMcNVS9d3cC16/Eb7QYv8X1Hxj3YpykjU8PRThstjq8puWdCUirLRwceXPHsVfbG9ZqC90CslV+TGGkh/wzSdPj/opcDInhzGQNej6ZrNGH0n6CIjskdWpkUOXKy2togbUTfVGGq64jSUYhz1LHuKyO5CS/XL54c/kuchJ2fPnr3mu0zGex5uXlrxfUFb+SaG8v7WBgNyaR9BDKyI7S98nuy3qBt2qQT518ouh7dGNrncK2UDNLEzVpexpzb13BbjSpWYOlTlAE5O86o84ECddGW50t7fV7Hts7rLyg+nNBpnBI4annZ1gDf1G9FD6u+0XPQ7VuUbPQ5uWVl6Ich14N1JluyMDvBx+0ZEmJ1GVav+N9pI4b7Xh8h9FrfcSHivsA9lS2ZXGujngBUvDs8ujLUKJ6X6DvBovvdk6istqn60YfB7LQTbh6J3LeeyfR7ZWXNW0iIZB2Fta2xZ7/xCNvqIiY1DCYLF3XPxH6hoe2XbNvMVYXZV/5C0dcnZ/S6cLeiJhwec2YbnqB0M0RKZ6kaHstWpQNpVGkaaRtTshFEr22J0yi05iIVX8eyCOrGd1/VS+NeTuTWRPbAu3IU7MjmtC/um1w1fZm1jLdAtIRUUj5DOe6iT2caif7v52xQl1YBLYmrm++7JmaokVYM+m2xlxj5+C0ZSSTQCZj/AAaKJQnFm8Y6dopotTydgWZ27dDkUrd2Ou8zh6Q36NlMUOmGzPf2o1GQOQ/C8+GrU0D/+kHeazudjbru4EqfzKdpNedRE7UJ6rXunf/hiWGZc63jATdhtYX9fLAf3drV6zQTQjeivNBa3nRcq4bou3Bhab9Kw7EtdlS7U1qA3JGzTHX/318JPwl4Q0q/mrCUFfbi62Ghu5fN3roif2pZMTOO7JC8oJ+m25YBDWLqDe+XN5aPtctOvKJjXsa0fkwP6LWprE+xkib8tOGyaItLqe6zf6wce3p69oPmfr/hcPwOJT/vHuMgLTDxbFUKPY7afGEl+qGXcd4l7ewympzuRua62ZsDnh8RU0/VG0lOwXCNtFt6tAWD9VzxLbiXDeJvrCbD+KEjNYtdVwSYyGGFymDak1poQWwoBv5wt6QaedtDt6+4SwNT+e6sc+y751QTQ3VGnVubgNNdrlqm5LR4kJ6trZlZbohd/IHjqQHkCskPTs9l797J11Enyx2hsCbFNJzzCa5TfGibgmixzebKQmDQatqPc11c+nrVlN59oKIzCJ3FtgOPJti5RePdCTGFrphev2Dy1L/I5iux7pVN+4uJ5yW4YJcHv1W2TZq5sFdIBftjfazGEQlh5UzzOI311C2ht5bVS/oplzFo91JZDYGfEqTom7sc/8hHCtihvWR7m+URZEiQK/x3MWH8g4rfO0kFzQI7HwmyLzW55uwL+9rlb2WWRyCzE/E7293AlJ418Q49Dtt87M8aDAHF3WTkvuvhYjoMtFekSCwzihO82bJyZZr2kEvwvR2vDAr/spM0mb7NJRHRt9Xc3vTpZlwTkTdY53rsqoS7g13qFQZKtzoJqzphcVbiqYLP6nlLhTRkyDu8L23NHKduW6z1w2pYmq9e83p0/cdI7PtzcIFylzXERnNYqZIwl0xmoewImnYpAnqdkXq03W1p2HhCGKvuUapgTfaB4MgIAGJ49/3v/qKlnHlyWSdKuuWrOPITN8fWZRdtOs/NkzFpJHIUt1MNzEYvZW945IDj5+ISKfNk5u3DVT+JE2zFvuUyAqpeLLNXTnIrSoMw5a4hqVVRKNN5ELBJO68r9XssUd4apexX7uKKPtaQ7Sx6RFL6HYZByLJ+/NUJbbZm3+Jnaiho1GRZCnUScsOctxQ0ifdPSCBdb+NE4i9HR7cHCOEgR/UGu36Wt7T0Gu2Lo5fkPDmTYY5I3k8PVNah63p+Pb7gMGpGvs8XdI81oeHG9QQ4e7X4nlTbJbWsUmfWp14eNEeC0NtZY2xhgjF5bE9HtvTfbNnng1I/MoUBoyauzwc9Ol9xiFI2/OE1cwhnucNtfxND+NlR3xAhKjz8dS8dNl73t72BulI/sV8XNfHtcbhFlaUb/HcKDmUTznptKONg3jU2TTXLW/wqjv/qnIoHGv6diEf8V/p1dj3A//Ta/FQxQ5r1c6r3oD623HXTO12CWS7l+SOg20rpVBJKx+YV1HWel9bnzc4rqZpwhUYDutu1hntaUeto21nLgg6twn30yAwDL0z4egExsyrafubknGv/s2V0O0OUrfQeeQiVl7ATyoK+xi7bvLNS8hxHPEXUQ8xShFKUKSIYCj7tvOxYw8FH3bJ4MoQl0o3Y0j43US695z+dgXk1pzT7fYuaQTglA0s+MbTTSd9cN20YOVgEf5gV3Jw/uTY3mmLUlMz6X/+iq+j9HHdnJqmZzyP9PX9b0Dkp9a+yVhvjW7Lb+j9Vyj/KRgfZf+4/+xZ/+KvIV79Pv4fhzLZvKi9t5+2NjTUhWX57SCDaiLoNZj0EA5KAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGCF+C+JwAuLdiSPeAAAAABJRU5ErkJggg=="
+            class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="./img/victor-axelsen_1759089349.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="" class="d-block w-100" alt="...">
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  
+ 
+<section class="product-section container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="product-title">Sản phẩm mới</h2>
+
+    <div class="product-filter">
+      <button class="btn btn-sm btn-outline-danger active">Tất cả</button>
+      <button class="btn btn-sm btn-outline-danger">Vợt</button>
+      <button class="btn btn-sm btn-outline-danger">Giày</button>
+      <button class="btn btn-sm btn-outline-danger">Áo quần</button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Product item -->
+    <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="./img/download.png" class="card-img-top" alt="Vợt">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Vợt Cầu Lông VNB V200 Xanh
+          </h6>
+
+          <p class="price">529.000 đ</p>
+
+          <a href="#" class="btn btn-outline-danger mt-auto">
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+    </div>
+ <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="racket.jpg" class="card-img-top" alt="Vợt">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Vợt Cầu Lông VNB V200 Xanh
+          </h6>
+
+          <p class="price">529.000 đ</p>
+
+          <a href="#" class="btn btn-outline-danger mt-auto">
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Copy col này để thêm sản phẩm -->
+  </div>
+</section>
+
+<h1>Sản phẩm cầu lông</h1>
+<div class="spcl">
+  <div class="vot">
+
+    <img src="https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/1.1.webp">
+
+  </div>
+  <div class="vot">
+    <img src="https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/1.1.webp">
+  </div>
+    <div class="vot">
+    <img src="https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/1.1.webp">
+  </div>
+      <div class="vot">
+    <img src="https://cdn.shopvnb.com/img/400x400/uploads/danh_muc/thumb/1.1.webp">
+      </div>
+</div>
+<h1>Tin tức mới</h1>
+<div class="tintuc">
+<div class="card" style="width: 18rem;">
+  <a href="#"><img src="https://cdn.shopvnb.com/img/400x240/uploads/tin_tuc/vot-cau-long_1711576456.webp" class="card-img-top" alt="hinhanh"></a>
+  <div class="card-body">
+    <a href ="#"><h5 class="card-title">Top các vợt cầu lông 700K đáng mua nhất được nhiều người săn đón.</h5></a>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+<div class="card" style="width: 18rem;">
+  <a href="#"><img src="https://cdn.shopvnb.com/img/400x240/uploads/tin_tuc/vot-cau-long_1711576456.webp" class="card-img-top" alt="hinhanh"></a>
+  <div class="card-body">
+    <a href ="#"><h5 class="card-title">Top các vợt cầu lông 700K đáng mua nhất được nhiều người săn đón.</h5></a>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+<div class="card" style="width: 18rem;">
+  <a href="#"><img src="https://cdn.shopvnb.com/img/400x240/uploads/tin_tuc/vot-cau-long_1711576456.webp" class="card-img-top" alt="hinhanh"></a>
+  <div class="card-body">
+    <a href ="#"><h5 class="card-title">Top các vợt cầu lông 700K đáng mua nhất được nhiều người săn đón.</h5></a>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+</div>
+
+    <style>
+        body {
+          height: auto;
+    
+  background-color: var(--bg);
+  color: var(--text);
+
+
+        }
+
+        #logo {
+          width: 125px;
+          height: auto;
+        }
+
+        #carouselExampleAutoplaying{
+          max-width: 1920px;
+          height: 640px;
+          margin: auto;
+        }
+
+       #carouselExampleAutoplaying img {
+  width: 100%;
+  height: 640px;
+  object-fit: cover;
+}
+
+        h1 {
+          text-align: center;
+          margin-top: 100px;
+          color:crimson;
+        }
+
+        /* Remove underline on the H1 link */
+        h1 a {
+          text-decoration: none;
+          color:crimson;
+          /* keep same color as H1 */
+        }
+
+        h1 a:hover,
+        h1 a:focus {
+          text-decoration: none;
+        }
+        .spcl{
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          margin-top: 50px;
+        }
+.vot img {
+  width: 200px;
+  transition: transform 0.3s;
+}
+
+.vot img:hover {
+  transform: scale(1.1);
+}
+        a {
+          text-decoration: none;
+          color:black;
+        }
+.tintuc{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+
+.footer-container {
+  display: flex;}
+  /* ================== LINING NEON RED ================== */
+:root {
+  /* BRAND */
+  --primary: #e63946;        /* đỏ thể thao (dịu hơn neon) */
+  --primary-hover: #ff4d5a;
+
+  /* BACKGROUND */
+  --bg: #f8f9fa;             /* nền xám rất nhạt */
+  --surface: #ffffff;        /* nền card / navbar */
+
+  /* TEXT */
+  --text: #1f2937;           /* chữ chính */
+  --muted: #6b7280;          /* chữ phụ */
+
+  /* BORDER / SHADOW */
+  --border: #e5e7eb;
+  --shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+
+/* BODY */
+body {
+  background-color:white;
+  color: var(--bg);
+}
+
+/* LINK */
+a {
+  color: var(--muted);
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: var(--surface) !important;
+
+
+}
+
+.navbar .nav-link {
+  color: var(--muted);
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: var(--primary);
+}
+
+/* H1 */
+h1,
+h1 a {
+  color: var(--primary);
+}
+
+/* CARD */
+.card {
+  background-color: var(--surface);
+}
+
+/* PRICE */
+.text-danger {
+  color: var(--primary) ;
+}
+
+/* BUTTON */
+.btn-outline-danger {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--primary);
+  color: #020617;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #9a1919;
+}
+
+/* TABS */
+.nav-tabs .nav-link {
+  color: var(--muted);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--primary);
+  color: #020617;
+}
+
+/* NEWS */
+.tintuc h5 {
+  color: var(--primary);
+}
+
+.tintuc h5:hover {
+  color: #b90303;
+}
+
+/* FOOTER */
+footer {
+  background-color: #000000;
+  color: var(--bg);
+}
+.product-title {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.product-filter button {
+  margin-left: 5px;
+}
+
+.product-filter .active {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.product-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+.price {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+
+
+      </style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+<footer class="footer">
+  <div class="footer-container">
+    
+    <!-- Cột 1 -->
+    <div class="footer-col">
+      <h4>THÔNG TIN CHUNG</h4>
+      <p>
+        <strong class="brand">VNB Sports</strong> là hệ thống cửa hàng cầu lông với
+        hơn 50 chi nhánh trên toàn quốc, cung cấp sỉ và lẻ các mặt hàng dụng cụ
+        cầu lông từ phong trào tới chuyên nghiệp.
+      </p>
+      <p>
+        <span class="highlight">Với sứ mệnh:</span><br>
+        "VNB cam kết mang đến những sản phẩm, dịch vụ chất lượng tốt nhất phục vụ
+        cho người chơi thể thao để nâng cao sức khỏe của chính mình."
+      </p>
+      <p>
+        <span class="highlight">Tầm nhìn:</span><br>
+        "Trở thành nhà phân phối và sản xuất thể thao lớn nhất Việt Nam"
+      </p>
+    </div>
+
+    <!-- Cột 2 -->
+    <div class="footer-col">
+      <h4>THÔNG TIN LIÊN HỆ</h4>
+      <p><strong>Hệ thống cửa hàng:</strong><br>
+        <span class="highlight">1 Super Center, 5 shop Premium và 78 cửa hàng</span>
+        trên toàn quốc
+      </p>
+      <a href="#" class="link">Xem tất cả các cửa hàng VNB</a>
+
+      <p><strong>Hotline:</strong> 0977508430 | 0338000308</p>
+      <p><strong>Email:</strong> info@shopvnb.com</p>
+      <p><strong>Hợp tác kinh doanh:</strong> 0947342259 (Ms. Thảo)</p>
+      <p><strong>Hotline bán sỉ:</strong> 0911195711 | 0911105211</p>
+      <p><strong>Nhượng quyền:</strong> 0334 741 141 (Mr. Hậu)</p>
+      <p><strong>Than phiền dịch vụ:</strong> 0334 741 141</p>
+
+      <div class="social">
+        <a href="#">F</a>
+        <a href="#">▶</a>
+      </div>
+    </div>
+
+    <!-- Cột 3 -->
+    <div class="footer-col">
+      <h4>CHÍNH SÁCH</h4>
+      <ul>
+        <li><a href="#">Thông tin vận chuyển & giao nhận</a></li>
+        <li><a href="#">Chính sách đổi trả, hoàn tiền</a></li>
+        <li><a href="#">Chính sách bảo hành</a></li>
+        <li><a href="#">Chính sách xử lý khiếu nại</a></li>
+        <li><a href="#">Điều khoản sử dụng</a></li>
+        <li><a href="#">Chính sách bảo mật thông tin</a></li>
+        <li><a href="#">Chính sách nhượng quyền</a></li>
+      </ul>
+    </div>
+
+    <!-- Cột 4 -->
+    <div class="footer-col">
+      <h4>HƯỚNG DẪN</h4>
+      <ul>
+        <li><a href="#">Danh sách tài khoản chính thức</a></li>
+        <li><a href="#">Hướng dẫn chọn vợt cầu lông</a></li>
+        <li><a href="#">Hướng dẫn thanh toán</a></li>
+        <li><a href="#">Kiểm tra bảo hành</a></li>
+        <li><a href="#">Kiểm tra đơn hàng</a></li>
+        <li><a href="#" class="highlight">HƯỚNG DẪN MUA HÀNG</a></li>
+      </ul>
+    </div>
+
+  </div>
+</footer>
+
+
+</html>

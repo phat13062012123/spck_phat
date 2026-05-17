@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Giày cầu lông | VNB Sports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+  /* BRAND */
+  --primary: #e63946;        /* đỏ thể thao (dịu hơn neon) */
+  --primary-hover: #ff4d5a;
+
+  /* BACKGROUND */
+  --bg: #f8f9fa;             /* nền xám rất nhạt */
+  --surface: #ffffff;        /* nền card / navbar */
+
+  /* TEXT */
+  --text: #1f2937;           /* chữ chính */
+  --muted: #6b7280;          /* chữ phụ */
+
+  /* BORDER / SHADOW */
+  --border: #e5e7eb;
+  --shadow: 0 6px 20px rgba(0,0,0,0.08);
+  
+}
+    body {
+      background-color: #f8f9fa;
+    }
+
+        #logo {
+          width: 125px;
+          height: auto;
+        }
+
+    .product-card img {
+      object-fit: cover;
+      height: 220px;
+    }
+
+    .product-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .price {
+      color: #e53935;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .page-title {
+      font-weight: bold;
+      margin: 30px 0 20px;
+    }
+    .navbar {
+  background-color: var(--surface) !important;
+
+
+}
+
+.navbar .nav-link {
+  color: var(--muted);
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: var(--primary);
+}
+
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER / NAVBAR ===== -->
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <img src="./img/brandimg.png" id="logo" alt="Logo">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="./webbs.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mua sắm
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="./trangvotcl.html">Vợt cầu lông</a></li>
+                <li><a class="dropdown-item" href="#">Giày cầu lông</a></li>
+                <li><a class="dropdown-item" href="./trangquanaocl.html">Quần & Áo cầu lông</a></li>
+                <li><a class="dropdown-item" href="./trangbalovatuivot.html">Balo & Túi vợt</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="./trangphukien.html">Phụ kiện cầu lông</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="./tranglienhe.html">Liên Hệ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Pro</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Tìm sản phẩm....." aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+<!-- ===== CONTENT ===== -->
+<div class="container">
+  <h2 class="page-title text-center">GIÀY CẦU LÔNG CHÍNH HÃNG</h2>
+
+  <div class="row g-4">
+
+    <!-- Product 1 -->
+    <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="./img/giay-yonex-power-cushion-65z3.webp" class="card-img-top" alt="Giày Yonex">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Giày cầu lông Yonex Power Cushion 65Z3
+          </h6>
+          <p class="price">2.950.000₫</p>
+          <a href="#" class="btn btn-outline-danger mt-auto">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="./img/giay-lining-ayzt003.webp" class="card-img-top" alt="Giày Lining">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Giày cầu lông Lining AYZT003
+          </h6>
+          <p class="price">2.300.000₫</p>
+          <a href="#" class="btn btn-outline-danger mt-auto">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="./img/giay-victor-a970.webp" class="card-img-top" alt="Giày Victor">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Giày cầu lông Victor A970
+          </h6>
+          <p class="price">2.650.000₫</p>
+          <a href="#" class="btn btn-outline-danger mt-auto">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="col-6 col-md-3">
+      <div class="card product-card h-100">
+        <img src="./img/giay-mizuno-wave-fang.webp" class="card-img-top" alt="Giày Mizuno">
+
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title">
+            Giày cầu lông Mizuno Wave Fang
+          </h6>
+          <p class="price">3.100.000₫</p>
+          <a href="#" class="btn btn-outline-danger mt-auto">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
