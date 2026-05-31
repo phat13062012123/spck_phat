@@ -1,3 +1,485 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smash Zone - Sân Chơi Cầu Lông Đỉnh Cao</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0f0a1c;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.1);
+            --primary-neon: #00ffcc;
+            --btn-orange: #ff5722;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            /* Simulated badminton court stylized background */
+            background: radial-gradient(circle at 50% 30%, #201335 0%, #0f0a1c 70%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .logo i {
+            color: var(--primary-neon);
+            font-size: 1.8rem;
+            transform: rotate(-15deg);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+            padding: 10px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-register {
+            background: linear-gradient(90deg, #ff784e, var(--btn-orange));
+            border: none;
+            color: var(--text-main);
+            padding: 10px 28px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 87, 34, 0.6);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            max-width: 1000px;
+            width: 100%;
+            margin: 40px auto;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        /* Decorative Floating Elements (Simulating design assets) */
+        .floating-racket {
+            position: absolute;
+            left: -50px;
+            top: 20px;
+            width: 160px;
+            opacity: 0.8;
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        .floating-shuttle {
+            position: absolute;
+            right: -30px;
+            top: 0;
+            width: 80px;
+            opacity: 0.7;
+            transform: rotate(25deg);
+            pointer-events: none;
+        }
+
+        /* --- TIMER / TOURNAMENT WIDGET --- */
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto 60px auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            /* Soft glow matching court line */
+            border-bottom: 3px solid var(--primary-neon); 
+        }
+
+        .countdown-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+        
+        .countdown-title strong {
+            color: var(--text-main);
+        }
+
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .time-num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-neon);
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .timer-divider {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 20px;
+        }
+
+        /* --- CAROUSEL / ITEMS SECTION --- */
+        .section-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .arrow {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 10px;
+        }
+
+        .arrow:hover {
+            color: var(--primary-neon);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+
+        .item-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 204, 0.3);
+        }
+
+        .item-card img {
+            max-height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.5));
+        }
+
+        .item-card h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            max-width: 1200px;
+            width: 100%;
+            margin: 80px auto 0 auto;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-neon);
+        }
+
+        /* --- RESPONSIVE DESIGN (Mobile & Tablet) --- */
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .item-card:last-child {
+                display: none; /* Hide 3rd item on tablet mimicking mobile views */
+            }
+            .floating-racket, .floating-shuttle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 15px;
+            }
+            .nav-buttons {
+                display: none; /* Can be integrated into a mobile burger menu later */
+            }
+            .menu-toggle {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .countdown-container {
+                padding: 15px;
+            }
+            .time-num {
+                font-size: 1.6rem;
+            }
+
+            .section-container {
+                padding: 0 15px;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .item-card:last-child {
+                display: flex; 
+            }
+
+            footer {
+                flex-direction: column-reverse;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-shuttlecock"></i>SMASH ZONE
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-login">ĐĂNG NHẬP</button>
+            <button class="btn-register">ĐĂNG KÝ</button>
+        </div>
+        <div class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <main class="hero">
+        <svg class="floating-racket" viewBox="0 0 100 100" fill="none" stroke="#00ffcc" stroke-width="2">
+            <ellipse cx="50" cy="40" rx="25" ry="35" stroke-dasharray="2,2"/>
+            <path d="M50 75 L50 95 M45 95 L55 95"/>
+        </svg>
+        
+        <h1>Sân Chơi Cầu Lông Đỉnh Cao<br>– Kết Nối Đam Mê</h1>
+        <p>Đặt sân, tìm đối thủ, theo dõi giải đấu chuyên nghiệp chỉ với một cú click chuột.</p>
+
+        <div class="countdown-container">
+            <div class="countdown-title">Next major tournament: <strong>Vietnam Open 2025</strong></div>
+            <div class="timer-grid">
+                <div class="time-block">
+                    <span class="time-num" id="days">02</span>
+                    <span class="time-label">Môn</span>
+                </div>
+                <div class="timer-divider">:</div>
+                <div class="time-block">
+                    <span class="time-num" id="hours">00</span>
+                    <span class="time-label">Dày</span>
+                </div>
+                <div class="timer-divider">:</div>
+                <div class="time-block">
+                    <span class="time-num" id="minutes">03</span>
+                    <span class="time-label">Môn</span>
+                </div>
+                <div class="timer-divider">:</div>
+                <div class="time-block">
+                    <span class="time-num" id="seconds">25</span>
+                    <span class="time-label">Sửa</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="section-container">
+        <h2 class="section-title">Hot items today</h2>
+        <div class="slider-wrapper">
+            <button class="arrow"><i class="fa-solid fa-chevron-left"></i></button>
+            
+            <div class="cards-grid">
+                <div class="item-card">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <ellipse cx="50" cy="35" rx="20" ry="25" stroke="#4f46e5" stroke-width="3" fill="none"/>
+                        <line x1="50" y1="60" x2="50" y2="90" stroke="#ff5722" stroke-width="3"/>
+                    </svg>
+                    <h3>Yonex Astrox 99</h3>
+                </div>
+
+                <div class="item-card">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <path d="M50 20 C40 40, 35 70, 35 80 L65 80 C65 70, 60 40, 50 20 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+                        <circle cx="50" cy="25" r="10" fill="#ffffff"/>
+                    </svg>
+                    <h3>Pro Shuttlecock A+</h3>
+                </div>
+
+                <div class="item-card">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <path d="M20 70 L40 40 L80 50 L80 75 L20 75 Z" fill="#00ffcc" opacity="0.8"/>
+                        <path d="M40 40 L60 75" stroke="#ffffff" stroke-width="3"/>
+                    </svg>
+                    <h3>Professional Badminton Shoes</h3>
+                </div>
+            </div>
+
+            <button class="arrow"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="copyright">
+            Copyright © 2022 Smash Zone Inc. All rights reserved.
+        </div>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+    </footer>
+
+</body>
+</html>
+
+``` -->
 <!DOCTYPE html>
 <html class="dark" lang="vi">
 <head>
@@ -30,6 +512,14 @@
         }
         .glass-card:hover {
             border-color: rgba(171, 214, 0, 0.3);
+        }
+        .hero-overlay {
+            background-image: radial-gradient(circle at 15% 20%, rgba(171,214,0,0.16), transparent 26%), radial-gradient(circle at 85% 8%, rgba(255,255,255,0.12), transparent 16%);
+        }
+        .section-surface {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
         }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0c0f0f; }
@@ -72,7 +562,7 @@
         }
         .input-dark {
             background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(171, 214, 0, 0.2);
-            transition: all 0.3s ease; color: rgb(0, 0, 0);
+            transition: all 0.3s ease; color: white;
         }
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
         .product-card {
@@ -132,79 +622,140 @@
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 
     <!-- TopNavBar Shell -->
-    <header class="bg-surface/80 backdrop-blur-md dark:bg-surface-container-lowest/80 font-headline-md text-headline-md border-b border-white/10 shadow-[0_0_20px_rgba(171,214,0,0.15)] flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50 sticky top-0">
-        <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed">Apex Badminton Store</div>
-        <nav class="hidden md:flex items-center gap-8">
-            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)] font-headline-md text-headline-md transition-all duration-150" href="#">Home</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="shoppage.html">Shop</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Courts</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Events</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Community</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Support</a>
-            <input placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
-        </nav>
-        <div class="flex items-center gap-6">
-            <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
-                <span class="material-symbols-outlined text-2xl">shopping_cart</span>
-                <span id="cartCountBadge" class="absolute -top-2 -right-2 bg-primary-fixed text-on-primary-fixed text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+    <header class="sticky top-0 z-50 bg-surface/95 backdrop-blur-xl border-b border-white/10 px-margin-mobile md:px-margin-desktop py-4 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex items-center gap-4">
+                <div class="rounded-full bg-primary-fixed/15 border border-primary-fixed/30 px-4 py-2 text-primary-fixed font-bold uppercase tracking-[0.24em]">Apex</div>
+                <div>
+                    <div class="font-headline-md text-headline-md font-bold text-primary">Apex Badminton Store</div>
+                    <div class="text-sm text-on-surface-variant">Trang thiết bị cầu lông hiệu suất cao.</div>
+                </div>
             </div>
-            <div id="userNavSection" class="flex items-center gap-3"></div>
+            <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-[0.18em] text-on-surface-variant">
+                <a class="text-primary border-b-2 border-primary pb-1" href="#">Home</a>
+                <a class="hover:text-primary transition-colors" href="#productsContainer">Shop</a>
+                <a class="hover:text-primary transition-colors" href="#">Courts</a>
+                <a class="hover:text-primary transition-colors" href="#">Events</a>
+                <a class="hover:text-primary transition-colors" href="#">Community</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-3xl">shopping_cart</span>
+                    <span id="cartCountBadge" class="absolute -top-2 -right-2 bg-primary-fixed text-on-primary-fixed text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </div>
+                <div id="userNavSection" class="flex items-center gap-3"></div>
+            </div>
         </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section class="relative h-[90vh] w-full flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img alt="Badminton pro shop interior" class="w-full h-full object-cover brightness-50 opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBknz92r1ahM44CPFGLlOFSk9oKtyQbkSNKY02YSyYNUyc5lwwrYT30LU_vX7fmJ-f24c2KT7KrEcWf6mD9Ka3pokvQIfPu8vjlxegNyDEvVHtakfjfooQzjCQGuxbfZu-1WyZtnmrwvM_Fqe-bN52nr_dLgSPi2kpqWj--X_w7n1USvUqLZk_445i733LnrfBnmiV0I_B3LDgoGWnRjuW0fMZFqKc3XSqayp2KuIY3AHWr6_HTpWKwyecOwcHEzYdzb8wuMfKy5cc" />
-                <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-            </div>
-            <div class="relative z-10 text-center px-margin-mobile">
-                <h1 class="font-display-lg text-display-lg md:text-[96px] text-primary mb-6 tracking-tighter leading-none">
-                    <span class="block">EQUIPPING</span>
-                    <span class="block text-primary-fixed drop-shadow-[0_0_20px_rgba(171,214,0,0.6)] neon-pulse">CHAMPIONS</span>
-                </h1>
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">Professional-grade gear for those who refuse to compromise.</p>
-                <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
-                    <button class="bg-primary-fixed text-on-primary-fixed px-12 py-5 font-headline-md text-headline-md font-bold uppercase tracking-tight hover:brightness-110 transition-all duration-300 shadow-[0_0_30px_rgba(171,214,0,0.3)]">Shop Collection</button>
-                    <button class="border border-white/20 text-white px-12 py-5 font-headline-md text-headline-md font-bold uppercase tracking-tight hover:bg-white/5 transition-all duration-300">View Bestsellers</button>
+        <section class="relative overflow-hidden bg-[linear-gradient(180deg,rgba(18,20,20,0.98),rgba(18,20,20,0.88))]">
+            <div class="absolute inset-0 hero-overlay pointer-events-none"></div>
+            <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-24 grid gap-12 lg:grid-cols-[1.1fr_.9fr] items-center">
+                <div class="relative z-10 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-primary-fixed/25 bg-primary-fixed/10 px-4 py-2 text-[13px] uppercase tracking-[0.25em] text-primary-fixed font-semibold mb-6">
+                        <span class="material-symbols-outlined text-base">bolt</span> Xu hướng 2026
+                    </div>
+                    <h1 class="font-display-lg text-[3.5rem] md:text-[5rem] leading-tight tracking-[-0.04em] text-white mb-6">
+                        Đột phá sức mạnh <span class="text-primary-fixed">và tốc độ</span> trên từng cú đánh.
+                    </h1>
+                    <p class="max-w-2xl mx-auto lg:mx-0 text-body-lg text-on-surface-variant mb-10">Thiết kế tinh tế, công nghệ cao cấp, mang đến sự chuẩn xác và thoải mái trong mỗi trận đấu. Hoàn hảo cho cả vận động viên chuyên nghiệp lẫn người chơi đam mê.</p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+                        <a href="#productsContainer" class="inline-flex items-center justify-center rounded-full bg-primary-fixed text-black px-8 py-4 font-semibold uppercase tracking-[0.15em] shadow-[0_12px_30px_rgba(171,214,0,0.25)] hover:brightness-110 transition-all">Khám phá</a>
+                        <button class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 py-4 font-semibold uppercase tracking-[0.15em] text-white hover:border-primary-fixed hover:text-primary-fixed transition-all">Bộ sưu tập</button>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="glass-card p-8 rounded-[32px] border border-white/10 shadow-[0_30px_70px_rgba(0,0,0,0.35)]">
+                        <div class="overflow-hidden rounded-[28px] bg-surface-container-high mb-6">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBknz92r1ahM44CPFGLlOFSk9oKtyQbkSNKY02YSyYNUyc5lwwrYT30LU_vX7fmJ-f24c2KT7KrEcWf6mD9Ka3pokvQIfPu8vjlxegNyDEvVHtakfjfooQzjCQGuxbfZu-1WyZtnmrwvM_Fqe-bN52nr_dLgSPi2kpqWj--X_w7n1USvUqLZk_445i733LnrfBnmiV0I_B3LDgoGWnRjuW0fMZFqKc3XSqayp2KuIY3AHWr6_HTpWKwyecOwcHEzYdzb8wuMfKy5cc" alt="Badminton pro shop interior" class="w-full h-[520px] object-cover object-center" />
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm uppercase tracking-[0.25em] text-primary-fixed mb-2">Bộ ảnh nổi bật</div>
+                            <h2 class="font-headline-lg text-headline-lg text-white">Đừng bỏ lỡ trang bị hàng đầu</h2>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Premium Collections -->
-        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+        <section class="py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
             <div class="max-w-container-max mx-auto">
-                <div class="flex items-end justify-between mb-12"><div><span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Categories</span><h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase">Premium Collections</h2></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">RACKETS</h3></div>
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">SHOES</h3></div>
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">SHUTTLES</h3></div>
+                <div class="flex flex-col md:flex-row items-end justify-between gap-6 mb-12">
+                    <div>
+                        <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase">Categories</span>
+                        <h2 class="font-headline-lg text-headline-lg md:text-[46px] mt-4 uppercase">Premium Collections</h2>
+                    </div>
+                    <p class="max-w-2xl text-on-surface-variant">Lựa chọn các danh mục tốt nhất giúp bạn tìm ra thiết bị phù hợp nhất cho phong cách thi đấu của mình.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card section-surface p-10 flex flex-col gap-4 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary-fixed text-4xl"><span class="material-symbols-outlined">sports_tennis</span></div>
+                        <h3 class="font-headline-md text-headline-md uppercase">RACKETS</h3>
+                        <p class="text-on-surface-variant">Cán cầm nhẹ, kiểm soát tốt và phát lực mạnh mẽ cho từng cú smash.</p>
+                    </div>
+                    <div class="glass-card section-surface p-10 flex flex-col gap-4 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary-fixed text-4xl"><span class="material-symbols-outlined">directions_run</span></div>
+                        <h3 class="font-headline-md text-headline-md uppercase">SHOES</h3>
+                        <p class="text-on-surface-variant">Đệm êm ái, bám sân tốt và thiết kế năng động cho mọi chuyển động.</p>
+                    </div>
+                    <div class="glass-card section-surface p-10 flex flex-col gap-4 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="text-primary-fixed text-4xl"><span class="material-symbols-outlined">emoji_events</span></div>
+                        <h3 class="font-headline-md text-headline-md uppercase">SHUTTLES</h3>
+                        <p class="text-on-surface-variant">Độ ổn định cao, quỹ đạo bay chuẩn và phản hồi mượt mà mỗi lần đánh.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Featured Products Grid -->
-        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+        <section class="py-20 px-margin-mobile md:px-margin-desktop">
             <div class="max-w-container-max mx-auto">
-                <div class="text-center mb-16"><h2 class="font-headline-lg text-headline-lg mb-4 uppercase tracking-tighter">FEATURED PERFORMANCE GEAR</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter" id="productsContainer"></div>
+                <div class="text-center mb-16">
+                    <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase">Bestsellers</span>
+                    <h2 class="font-headline-lg text-headline-lg mt-4 uppercase tracking-[0.05em]">Featured Performance Gear</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="productsContainer"></div>
             </div>
         </section>
 
-        <!-- Founder's Corner & Why Choose Apex (keeping original sections) -->
-        <section class="py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
-            <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-16">
-                <div class="md:col-span-7 relative"><div class="aspect-[4/3] relative z-10"><img class="w-full h-full object-cover shadow-[40px_-40px_0px_rgba(171,214,0,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyfb0Ns5cyHRksWD1xMxysKsSub8d_m1Mz6Fz1j5fB6fxIBZuZJLdaoObVIzmwJCpoQ2QlAgApmnHg7lEWe1g--AquBtwkkgoO8SgyGwPBsXEj-63-WhkFk2nWY5JShkBOBWolXMefUkWMUovx0I2ua_WcrmxqZ1jnnCSIhawCVc2O-9rZTHB4dfgbCdZiJk7ToLl_mGEWzx59p4DldRIqB1a_luBKZLRaDcuYobAbBI0YSqHiEq3cbEW1nrWT82nlKwfLfByoYzI" /></div></div>
-                <div class="md:col-span-5"><h2 class="font-headline-lg text-headline-lg md:text-[56px] leading-tight mb-8 uppercase">GEAR ENGINEERED FOR THE HIGHEST LEVEL OF PLAY.</h2></div>
+        <!-- Founder Story -->
+        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+            <div class="max-w-container-max mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] items-center">
+                <div class="glass-card p-10 section-surface">
+                    <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase">Founder’s Corner</span>
+                    <h2 class="font-headline-lg text-headline-lg mt-6">Gear engineered for the highest level of play.</h2>
+                    <p class="mt-6 text-on-surface-variant">Tại Apex, chúng tôi tin rằng công nghệ tốt nhất phải đi cùng thiết kế thông minh. Mỗi sản phẩm đều được chọn lọc kỹ lưỡng để hỗ trợ cả tốc độ, độ bền và cảm giác đánh chính xác.</p>
+                </div>
+                <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#1b1c1e] to-[#0f1011] shadow-[0_30px_70px_rgba(0,0,0,0.3)]">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyfb0Ns5cyHRksWD1xMxysKsSub8d_m1Mz6Fz1j5fB6fxIBZuZJLdaoObVIzmwJCpoQ2QlAgApmnHg7lEWe1g--AquBtwkkgoO8SgyGwPBsXEj-63-WhkFk2nWY5JShkBOBWolXMefUkWMUovx0I2ua_WcrmxqZ1jnnCSIhawCVc2O-9rZTHB4dfgbCdZiJk7ToLl_mGEWzx59p4DldRIqB1a_luBKZLRaDcuYobAbBI0YSqHiEq3cbEW1nrWT82nlKwfLfByoYzI" alt="Apex equipment" />
+                </div>
             </div>
         </section>
-        <section class="py-32 px-margin-mobile md:px-margin-desktop relative">
-            <div class="max-w-container-max mx-auto"><div class="text-center mb-20"><h2 class="font-headline-lg text-headline-lg md:text-[56px] uppercase tracking-tighter">Why Choose Apex Store</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">EXPRESS DELIVERY</h3></div>
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">100% AUTHENTIC</h3></div>
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">PRO STRINGING</h3></div>
+
+        <!-- Why Choose Apex -->
+        <section class="py-24 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto text-center mb-14">
+                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase">Why Choose Apex</span>
+                <h2 class="font-headline-lg text-headline-lg mt-4 uppercase tracking-[0.05em]">Why Choose Apex Store</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card section-surface p-8 rounded-[32px] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-primary-fixed text-4xl mb-4"><span class="material-symbols-outlined">local_shipping</span></div>
+                    <h3 class="font-headline-md uppercase mb-3">Express Delivery</h3>
+                    <p class="text-on-surface-variant">Giao hàng nhanh chóng, luôn đúng hẹn để bạn kịp sẵn sàng cho buổi tập.</p>
+                </div>
+                <div class="glass-card section-surface p-8 rounded-[32px] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-primary-fixed text-4xl mb-4"><span class="material-symbols-outlined">verified</span></div>
+                    <h3 class="font-headline-md uppercase mb-3">100% Authentic</h3>
+                    <p class="text-on-surface-variant">Chỉ cung cấp hàng chính hãng, bảo đảm hiệu suất và độ bền theo chuẩn quốc tế.</p>
+                </div>
+                <div class="glass-card section-surface p-8 rounded-[32px] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-primary-fixed text-4xl mb-4"><span class="material-symbols-outlined">build_circle</span></div>
+                    <h3 class="font-headline-md uppercase mb-3">Pro Stringing</h3>
+                    <p class="text-on-surface-variant">Dịch vụ căng cước chuyên nghiệp giúp bạn đạt độ căng chuẩn xác từng chi tiết.</p>
                 </div>
             </div>
         </section>
@@ -316,11 +867,11 @@
 
             function saveCart() { localStorage.setItem('apex_cart', JSON.stringify(cart)); }
             function loadCart() { cart = JSON.parse(localStorage.getItem('apex_cart') || '[]'); updateCartUI(); }
-            function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); showToast(`➕ ${product.name} vào giỏ`); }
+            function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); }
             function updateCartUI() {
                 document.getElementById('cartCountBadge').innerText = cart.reduce((s,i) => s + i.quantity, 0);
                 const container = document.getElementById('cartItemsList');
-                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
+                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">Giỏ hàng trống</div>'; updateCartTotals(); return; }
                 container.innerHTML = cart.map((item, idx) => `<div class="flex gap-3 bg-black/30 p-2 rounded-xl"><img src="${item.image}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="font-bold">${item.name}</div><div class="text-[#abd600]">${item.price.toLocaleString()}₫</div><div class="flex items-center gap-2 mt-1"><button class="minus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">-</button><span>${item.quantity}</span><button class="plus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">+</button><button class="remove-item text-red-400 text-sm ml-2" data-idx="${idx}">Xóa</button></div></div></div>`).join('');
                 attachCartEvents(); updateCartTotals(); saveCart();
             }
@@ -340,18 +891,9 @@
             }
             function completePurchase(totalSpentNow) {
                 if (!isLoggedIn) { showToast("Đăng nhập để thanh toán", true); openAuthModal(); return false; }
-                if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return false; }
-                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow;
-                currentUser.totalOrders = (currentUser.totalOrders || 0) + 1;
-                updateUserInStorage(currentUser);
-                cart = [];
-                saveCart();
-                updateCartUI();
-                closeCartDrawer();
-                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`);
-                renderNavbarAvatar();
-                return true;
+                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; currentUser.totalOrders = (currentUser.totalOrders || 0) + 1;
+                updateUserInStorage(currentUser); canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                showToast(`✅ Thanh toán thành công!`); cart = []; updateCartUI(); closeCartDrawer(); renderNavbarAvatar(); return true;
             }
 
             function renderNavbarAvatar() {

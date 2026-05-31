@@ -3,16 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
-    <title>Apex Badminton Store | Equipping Champions</title>
+    <title>Apex Badminton Store | Shop Premium Gear</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <style>
+        /* ===== CORE CSS CONCEPT (THEME + GLASS + NEON + SCROLLBAR + CART) ===== */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -59,7 +56,10 @@
             border-left: 1px solid #abd60030; box-shadow: -10px 0 30px rgba(0,0,0,0.6);
         }
         .cart-drawer.open { right: 0; }
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1050; display: none; }
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1050; display: none;
+        }
         .cart-overlay.show { display: block; }
         .toast-msg {
             position: fixed; bottom: 24px; right: 24px; background: #1e2a1a; border-left: 4px solid #abd600;
@@ -72,7 +72,7 @@
         }
         .input-dark {
             background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(171, 214, 0, 0.2);
-            transition: all 0.3s ease; color: rgb(0, 0, 0);
+            transition: all 0.3s ease; color: white;
         }
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
         .product-card {
@@ -81,13 +81,29 @@
         .product-card:hover { transform: translateY(-6px); border-color: #abd60040; box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* shop page additional polish */
+        .shop-hero {
+            background: radial-gradient(circle at 20% 30%, rgba(171,214,0,0.08), transparent 70%);
+        }
+        .filter-chip {
+            background: rgba(30,30,30,0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(171,214,0,0.2);
+            transition: all 0.2s;
+        }
+        .filter-chip.active, .filter-chip:hover {
+            border-color: #abd600;
+            background: rgba(171,214,0,0.2);
+            color: #abd600;
+        }
     </style>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
+                    colors: {
                         "surface-container-low": "#1a1c1c", "error-container": "#93000a",
                         "on-tertiary-fixed-variant": "#474746", "secondary": "#c8c6c5",
                         "on-tertiary-fixed": "#1b1b1c", "on-secondary-container": "#bab8b7",
@@ -108,14 +124,14 @@
                         "on-secondary-fixed": "#1c1b1b", "surface-bright": "#37393a", "on-secondary": "#313030",
                         "surface-container": "#1e2020"
                     },
-                    "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-                    "spacing": { "margin-mobile": "20px", "margin-desktop": "64px", "gutter": "24px", "container-max": "1280px", "unit": "4px" },
-                    "fontFamily": {
+                    borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" },
+                    spacing: { "margin-mobile": "20px", "margin-desktop": "64px", "gutter": "24px", "container-max": "1280px", "unit": "4px" },
+                    fontFamily: {
                         "headline-md": ["Archivo Narrow"], "body-md": ["Inter"], "headline-lg": ["Archivo Narrow"],
                         "headline-lg-mobile": ["Archivo Narrow"], "display-lg": ["Archivo Narrow"],
                         "body-lg": ["Inter"], "label-sm": ["JetBrains Mono"]
                     },
-                    "fontSize": {
+                    fontSize: {
                         "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
                         "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
                         "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
@@ -124,24 +140,24 @@
                         "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
                         "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 
-    <!-- TopNavBar Shell -->
+    <!-- TopNavBar (identical style, active shop) -->
     <header class="bg-surface/80 backdrop-blur-md dark:bg-surface-container-lowest/80 font-headline-md text-headline-md border-b border-white/10 shadow-[0_0_20px_rgba(171,214,0,0.15)] flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50 sticky top-0">
-        <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed">Apex Badminton Store</div>
+        <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed cursor-pointer" onclick="window.location.href='#'">Apex Badminton Store</div>
         <nav class="hidden md:flex items-center gap-8">
-            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)] font-headline-md text-headline-md transition-all duration-150" href="#">Home</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="shoppage.html">Shop</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Courts</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Events</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Community</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Support</a>
-            <input placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="#">Home</a>
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)]" href="#">Shop</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="#">Courts</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="#">Events</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="#">Community</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="#">Support</a>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
         </nav>
         <div class="flex items-center gap-6">
             <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
@@ -152,70 +168,48 @@
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="relative h-[90vh] w-full flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img alt="Badminton pro shop interior" class="w-full h-full object-cover brightness-50 opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBknz92r1ahM44CPFGLlOFSk9oKtyQbkSNKY02YSyYNUyc5lwwrYT30LU_vX7fmJ-f24c2KT7KrEcWf6mD9Ka3pokvQIfPu8vjlxegNyDEvVHtakfjfooQzjCQGuxbfZu-1WyZtnmrwvM_Fqe-bN52nr_dLgSPi2kpqWj--X_w7n1USvUqLZk_445i733LnrfBnmiV0I_B3LDgoGWnRjuW0fMZFqKc3XSqayp2KuIY3AHWr6_HTpWKwyecOwcHEzYdzb8wuMfKy5cc" />
-                <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-            </div>
-            <div class="relative z-10 text-center px-margin-mobile">
-                <h1 class="font-display-lg text-display-lg md:text-[96px] text-primary mb-6 tracking-tighter leading-none">
-                    <span class="block">EQUIPPING</span>
-                    <span class="block text-primary-fixed drop-shadow-[0_0_20px_rgba(171,214,0,0.6)] neon-pulse">CHAMPIONS</span>
-                </h1>
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12">Professional-grade gear for those who refuse to compromise.</p>
-                <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
-                    <button class="bg-primary-fixed text-on-primary-fixed px-12 py-5 font-headline-md text-headline-md font-bold uppercase tracking-tight hover:brightness-110 transition-all duration-300 shadow-[0_0_30px_rgba(171,214,0,0.3)]">Shop Collection</button>
-                    <button class="border border-white/20 text-white px-12 py-5 font-headline-md text-headline-md font-bold uppercase tracking-tight hover:bg-white/5 transition-all duration-300">View Bestsellers</button>
+    <main class="fade-in">
+        <!-- SHOP HERO SECTION (premium vibe) -->
+        <section class="shop-hero relative w-full py-20 md:py-28 px-margin-mobile md:px-margin-desktop border-b border-white/5">
+            <div class="max-w-container-max mx-auto text-center">
+                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase bg-white/5 px-4 py-1 rounded-full inline-block mb-4 neon-pulse">Official Gear</span>
+                <h1 class="font-display-lg text-[56px] md:text-[88px] uppercase text-primary-fixed leading-none tracking-tighter mb-6">SHOP <span class="text-white">COLLECTION</span></h1>
+                <p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mb-8">Vợt cao cấp, giày chuyên nghiệp & phụ kiện đẳng cấp thế giới</p>
+                <div class="flex justify-center gap-4 flex-wrap">
+                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer active" data-filter="all">Tất cả</div>
+                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="rackets">Vợt cầu lông</div>
+                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shoes">Giày chuyên dụng</div>
+                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shuttles">Cầu lông</div>
                 </div>
             </div>
         </section>
 
-        <!-- Premium Collections -->
-        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+        <!-- PRODUCTS GRID - FULL SHOP PAGE -->
+        <section class="py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
             <div class="max-w-container-max mx-auto">
-                <div class="flex items-end justify-between mb-12"><div><span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Categories</span><h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase">Premium Collections</h2></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">RACKETS</h3></div>
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">SHOES</h3></div>
-                    <div class="glass-card p-10 group transition-all duration-500 relative overflow-hidden h-[300px] flex flex-col justify-end cursor-pointer"><h3 class="font-display-lg text-[48px] text-primary group-hover:text-primary-fixed transition-colors">SHUTTLES</h3></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter" id="shopProductsGrid"></div>
+                <div id="noResultsMsg" class="text-center py-16 hidden">
+                    <span class="material-symbols-outlined text-5xl text-white/30">search_off</span>
+                    <p class="mt-2 text-white/50">Không tìm thấy sản phẩm phù hợp</p>
                 </div>
             </div>
         </section>
 
-        <!-- Featured Products Grid -->
-        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
-            <div class="max-w-container-max mx-auto">
-                <div class="text-center mb-16"><h2 class="font-headline-lg text-headline-lg mb-4 uppercase tracking-tighter">FEATURED PERFORMANCE GEAR</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter" id="productsContainer"></div>
-            </div>
-        </section>
-
-        <!-- Founder's Corner & Why Choose Apex (keeping original sections) -->
-        <section class="py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
-            <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-16">
-                <div class="md:col-span-7 relative"><div class="aspect-[4/3] relative z-10"><img class="w-full h-full object-cover shadow-[40px_-40px_0px_rgba(171,214,0,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyfb0Ns5cyHRksWD1xMxysKsSub8d_m1Mz6Fz1j5fB6fxIBZuZJLdaoObVIzmwJCpoQ2QlAgApmnHg7lEWe1g--AquBtwkkgoO8SgyGwPBsXEj-63-WhkFk2nWY5JShkBOBWolXMefUkWMUovx0I2ua_WcrmxqZ1jnnCSIhawCVc2O-9rZTHB4dfgbCdZiJk7ToLl_mGEWzx59p4DldRIqB1a_luBKZLRaDcuYobAbBI0YSqHiEq3cbEW1nrWT82nlKwfLfByoYzI" /></div></div>
-                <div class="md:col-span-5"><h2 class="font-headline-lg text-headline-lg md:text-[56px] leading-tight mb-8 uppercase">GEAR ENGINEERED FOR THE HIGHEST LEVEL OF PLAY.</h2></div>
-            </div>
-        </section>
-        <section class="py-32 px-margin-mobile md:px-margin-desktop relative">
-            <div class="max-w-container-max mx-auto"><div class="text-center mb-20"><h2 class="font-headline-lg text-headline-lg md:text-[56px] uppercase tracking-tighter">Why Choose Apex Store</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">EXPRESS DELIVERY</h3></div>
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">100% AUTHENTIC</h3></div>
-                    <div class="glass-card p-10 flex flex-col"><h3 class="font-headline-md text-headline-md mb-4 uppercase">PRO STRINGING</h3></div>
-                </div>
+        <!-- BANNER FLASH SALE (glass-card extension) -->
+        <section class="py-16 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto glass-card rounded-3xl p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 border border-[#abd60020]">
+                <div><h3 class="font-headline-lg text-headline-lg text-primary-fixed">⚡ FLASH SALE</h3><p class="text-on-surface-variant">Giảm đến 15% cho thành viên Diamond</p></div>
+                <div class="flex gap-3"><span class="bg-black/50 px-5 py-2 rounded-full font-mono text-2xl font-bold text-primary-fixed">24</span><span class="text-white/70">giờ</span></div>
             </div>
         </section>
     </main>
 
     <footer class="bg-surface-container-lowest border-t border-white/5 w-full py-12 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
-        <div class="flex flex-col items-center md:items-start gap-4"><div class="font-headline-md text-headline-md font-bold text-primary uppercase">Apex Badminton Store</div><p class="text-on-surface-variant/60">© 2024 Apex Store. Equipping the Elite.</p></div>
+        <div class="flex flex-col items-center md:items-start gap-4"><div class="font-headline-md text-headline-md font-bold text-primary uppercase">Apex Badminton Store</div><p class="text-on-surface-variant/60">© 2025 Apex Store. Equipping the Elite.</p></div>
         <div class="flex gap-8"><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Support</a><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Warranty</a></div>
     </footer>
 
-    <!-- Cart Drawer -->
+    <!-- Cart Drawer + Overlay -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-drawer" id="cartDrawer">
         <div class="flex justify-between items-center pb-4 border-b border-white/10">
@@ -236,17 +230,14 @@
         <div class="modal-glass rounded-3xl w-[90%] max-w-lg p-6 border border-[#abd600]/30 shadow-2xl">
             <div class="flex justify-between items-center border-b border-white/10 pb-3"><h3 class="text-xl font-bold"><span class="material-symbols-outlined text-[#abd600]">account_circle</span> Hồ sơ thành viên</h3><span id="closeProfileBtn" class="material-symbols-outlined cursor-pointer hover:text-[#abd600]">close</span></div>
             <div id="profileContent" class="py-5 space-y-4"></div>
-            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition">Đăng xuất</button>
+            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition" >Đăng xuất</button>
         </div>
     </div>
 
-    <!-- Auth Modal (New Design) -->
+    <!-- Auth Modal -->
     <div id="authModal" class="fixed inset-0 z-[1200] hidden items-center justify-center bg-black/80 backdrop-blur-md px-4">
         <div class="relative z-10 w-full max-w-md">
-            <div class="text-center mb-8">
-                <h1 class="font-headline-lg text-headline-lg text-primary neon-pulse">APEX</h1>
-                <p class="text-on-surface-variant">Đăng nhập để tiếp tục</p>
-            </div>
+            <div class="text-center mb-8"><h1 class="font-headline-lg text-headline-lg text-primary neon-pulse">APEX</h1><p class="text-on-surface-variant">Đăng nhập để tiếp tục</p></div>
             <div class="flex gap-4 mb-6 glass-card p-1">
                 <button id="modalLoginTab" class="flex-1 py-3 px-4 font-headline-md text-headline-md rounded-lg transition-all duration-300 bg-primary-fixed text-on-primary">Đăng Nhập</button>
                 <button id="modalRegisterTab" class="flex-1 py-3 px-4 font-headline-md text-headline-md rounded-lg transition-all duration-300 text-on-surface-variant">Đăng Ký</button>
@@ -277,10 +268,16 @@
             let isLoggedIn = false;
             let cart = [];
 
-            const products = [
-                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB07J8wB7znBWKx-QPKBh615R5pr9kZv28QDfcGpAb_HHTajx2K1gdyCL5bgDR8k17N_3r4n2yuWB7SH2Ce4uKCuraGs2hL2qqf_jXmbwV_4-epjjPMtjowVll8xyzsVt1FdiAmqQzGKboQD3yMdbZlEwsGPvGD-XLmOXIGP0N0cpA2bpIZDfGWODZH6iIErd74DAh7eTAx71znIfqmww3T58nLFbGinRYoL2_ohR7irH05xO_0P11DuMOz7t3s2tZBw7l0Kp83J4w" },
-                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAXIaH8Ht_-vP2qByitDWqFdnVmW3B1Adf_9vjDY4uo44yd1udtTFe-VWCSPZwDibEl-NzSIpdAOnwa7PhoQNS2ziULS7MSz7JCn3yMw4TeQtgwKdEvIx5RwRX9iqWOXfIC50ipXLub8fN5DixkIkijbA9s7e3k0YbXnYCeAZFF5tFtmmUJ4iPQ5iPKPxWTlc7DHlw7zPb1AdT_ScLNIs8g0tEL5qdI1BZMGopN17YHS2Zk-wcmQdH_9AosnV7lZQ0lCMG-eH8TMoY" },
-                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB7c74ZgDEPg8MaTnB7AMffzRDpEyczDPJgtu01d4Zq6dGuOzUf0UFPxfW5PgVe_a0Bpx9V6otveElsg6iYlTblwcJidaMqChx7sL7adhz98Sl35PX54zYmQVxgq5o0xR99hXs1HHT5xhGBIQQx4bI65KLH8I7f33xn2i4MfQF7kIOK8owH3d6x1uCXugumJatjyaJw5JfjWHs-Uu6W8tF97clupqbv8X8M2mhRupmA6WMvT65JlQSpXFwl4LnA3ZImUDaOVKPYQO4" }
+            // Expanded product list
+            const allProducts = [
+                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB07J8wB7znBWKx-QPKBh615R5pr9kZv28QDfcGpAb_HHTajx2K1gdyCL5bgDR8k17N_3r4n2yuWB7SH2Ce4uKCuraGs2hL2qqf_jXmbwV_4-epjjPMtjowVll8xyzsVt1FdiAmqQzGKboQD3yMdbZlEwsGPvGD-XLmOXIGP0N0cpA2bpIZDfGWODZH6iIErd74DAh7eTAx71znIfqmww3T58nLFbGinRYoL2_ohR7irH05xO_0P11DuMOz7t3s2tZBw7l0Kp83J4w", category: "rackets" },
+                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAXIaH8Ht_-vP2qByitDWqFdnVmW3B1Adf_9vjDY4uo44yd1udtTFe-VWCSPZwDibEl-NzSIpdAOnwa7PhoQNS2ziULS7MSz7JCn3yMw4TeQtgwKdEvIx5RwRX9iqWOXfIC50ipXLub8fN5DixkIkijbA9s7e3k0YbXnYCeAZFF5tFtmmUJ4iPQ5iPKPxWTlc7DHlw7zPb1AdT_ScLNIs8g0tEL5qdI1BZMGopN17YHS2Zk-wcmQdH_9AosnV7lZQ0lCMG-eH8TMoY", category: "shoes" },
+                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB7c74ZgDEPg8MaTnB7AMffzRDpEyczDPJgtu01d4Zq6dGuOzUf0UFPxfW5PgVe_a0Bpx9V6otveElsg6iYlTblwcJidaMqChx7sL7adhz98Sl35PX54zYmQVxgq5o0xR99hXs1HHT5xhGBIQQx4bI65KLH8I7f33xn2i4MfQF7kIOK8owH3d6x1uCXugumJatjyaJw5JfjWHs-Uu6W8tF97clupqbv8X8M2mhRupmA6WMvT65JlQSpXFwl4LnA3ZImUDaOVKPYQO4", category: "shuttles" },
+                { id: 4, name: "Carbon X-Treme Racket", price: 5200000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "rackets" },
+                { id: 5, name: "Swift Claw 3.0 Shoes", price: 3100000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop", category: "shoes" },
+                { id: 6, name: "Tournament Grade Shuttles (12pcs)", price: 690000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "shuttles" },
+                { id: 7, name: "Apex Pro Backpack", price: 1250000, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop", category: "accessories" },
+                { id: 8, name: "Elite Grip Towel", price: 290000, image: "https://images.unsplash.com/photo-1617206658066-8c191f4e2fa8?w=400&h=400&fit=crop", category: "accessories" }
             ];
 
             function getRankFromUser(user) {
@@ -301,17 +298,8 @@
                 const users = loadUsers(); const idx = users.findIndex(u => u.id === updatedUser.id);
                 if (idx !== -1) users[idx] = updatedUser; saveUsers(users); currentUser = updatedUser; saveCurrentUser(); renderNavbarAvatar();
             }
-
-            function login(email, password) {
-                const users = loadUsers(); const user = users.find(u => u.email === email && u.password === password);
-                if (user) { currentUser = { ...user, totalSpent: user.totalSpent || 0, totalOrders: user.totalOrders || 0 }; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); updateCartUI(); showToast(`Chào ${user.fullName}!`); return true; }
-                return false;
-            }
-            function register(fullName, email, username, password) {
-                let users = loadUsers(); if (users.find(u => u.email === email)) { showToast("Email đã tồn tại!", true); return false; }
-                const newUser = { id: Date.now(), fullName, email, username, password, totalSpent: 0, totalOrders: 0 };
-                users.push(newUser); saveUsers(users); currentUser = newUser; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Đăng ký thành công!`); return true;
-            }
+            function login(email, password) { const users = loadUsers(); const user = users.find(u => u.email === email && u.password === password); if (user) { currentUser = { ...user, totalSpent: user.totalSpent || 0, totalOrders: user.totalOrders || 0 }; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); updateCartUI(); showToast(`Chào ${user.fullName}!`); return true; } return false; }
+            function register(fullName, email, username, password) { let users = loadUsers(); if (users.find(u => u.email === email)) { showToast("Email đã tồn tại!", true); return false; } const newUser = { id: Date.now(), fullName, email, username, password, totalSpent: 0, totalOrders: 0 }; users.push(newUser); saveUsers(users); currentUser = newUser; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Đăng ký thành công!`); return true; }
             function logout() { isLoggedIn = false; currentUser = null; saveCurrentUser(); renderNavbarAvatar(); cart = []; saveCart(); updateCartUI(); document.getElementById('profileModal').classList.add('hidden'); }
 
             function saveCart() { localStorage.setItem('apex_cart', JSON.stringify(cart)); }
@@ -320,7 +308,7 @@
             function updateCartUI() {
                 document.getElementById('cartCountBadge').innerText = cart.reduce((s,i) => s + i.quantity, 0);
                 const container = document.getElementById('cartItemsList');
-                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
+                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">🛒 Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
                 container.innerHTML = cart.map((item, idx) => `<div class="flex gap-3 bg-black/30 p-2 rounded-xl"><img src="${item.image}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="font-bold">${item.name}</div><div class="text-[#abd600]">${item.price.toLocaleString()}₫</div><div class="flex items-center gap-2 mt-1"><button class="minus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">-</button><span>${item.quantity}</span><button class="plus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">+</button><button class="remove-item text-red-400 text-sm ml-2" data-idx="${idx}">Xóa</button></div></div></div>`).join('');
                 attachCartEvents(); updateCartTotals(); saveCart();
             }
@@ -332,64 +320,91 @@
             function updateCartTotals() {
                 const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
                 document.getElementById('cartSubtotal').innerText = subtotal.toLocaleString() + '₫';
-                let discountPercent = isLoggedIn ? getRankFromUser(currentUser).discount : 0;
+                let discountPercent = isLoggedIn && currentUser ? getRankFromUser(currentUser).discount : 0;
                 const discountAmount = subtotal * discountPercent / 100;
                 document.getElementById('discountAmount').innerText = discountAmount.toLocaleString() + '₫';
                 document.getElementById('cartTotalFinal').innerText = (subtotal - discountAmount).toLocaleString() + '₫';
                 document.getElementById('cartDiscountLine').style.display = discountPercent > 0 ? 'flex' : 'none';
             }
-            function completePurchase(totalSpentNow) {
-                if (!isLoggedIn) { showToast("Đăng nhập để thanh toán", true); openAuthModal(); return false; }
-                if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return false; }
-                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow;
-                currentUser.totalOrders = (currentUser.totalOrders || 0) + 1;
-                updateUserInStorage(currentUser);
-                cart = [];
-                saveCart();
-                updateCartUI();
-                closeCartDrawer();
-                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`);
-                renderNavbarAvatar();
-                return true;
+            
+            // FIXED: Complete purchase function - clears cart properly
+            function completePurchase(totalSpentNow) { 
+                if (!isLoggedIn) { 
+                    showToast("Đăng nhập để thanh toán", true); 
+                    openAuthModal(); 
+                    return false; 
+                } 
+                
+                if (cart.length === 0) {
+                    showToast("Giỏ hàng trống!", true);
+                    return false;
+                }
+                
+                // Update user spending
+                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; 
+                currentUser.totalOrders = (currentUser.totalOrders || 0) + 1; 
+                updateUserInStorage(currentUser); 
+                
+                // Clear cart
+                cart = []; 
+                saveCart(); 
+                updateCartUI(); // Refresh cart display
+                
+                // Close cart drawer
+                closeCartDrawer(); 
+                
+                // Celebration effects
+                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); 
+                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`); 
+                
+                // Update user rank display
+                renderNavbarAvatar(); 
+                return true; 
             }
-
+            
             function renderNavbarAvatar() {
                 const container = document.getElementById('userNavSection');
-                if (isLoggedIn && currentUser) {
-                    const letter = currentUser.fullName?.charAt(0).toUpperCase() || 'U';
-                    const rank = getRankFromUser(currentUser);
-                    container.innerHTML = `<div class="flex items-center gap-2"><span class="rank-badge"><span class="material-symbols-outlined text-sm">${rank.icon}</span> ${rank.name}</span><div class="user-avatar-circle" id="avatarBtn">${letter}</div></div>`;
-                    document.getElementById('avatarBtn').onclick = () => showProfileModal();
-                } else {
-                    container.innerHTML = `<button id="openAuthNavBtn" class="bg-primary-container text-on-primary px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-200 shadow-[0_0_15px_rgba(171,214,0,0.4)]">Sign In</button>`;
-                    document.getElementById('openAuthNavBtn').onclick = openAuthModal;
-                }
+                if (isLoggedIn && currentUser) { const letter = currentUser.fullName?.charAt(0).toUpperCase() || 'U'; const rank = getRankFromUser(currentUser); container.innerHTML = `<div class="flex items-center gap-2"><span class="rank-badge"><span class="material-symbols-outlined text-sm">${rank.icon}</span> ${rank.name}</span><div class="user-avatar-circle" id="avatarBtn">${letter}</div></div>`; document.getElementById('avatarBtn')?.addEventListener('click',()=>showProfileModal()); }
+                else { container.innerHTML = `<button id="openAuthNavBtn" class="bg-primary-container text-on-primary px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-200 shadow-[0_0_15px_rgba(171,214,0,0.4)]">Sign In</button>`; document.getElementById('openAuthNavBtn')?.addEventListener('click',openAuthModal); }
             }
-            function showProfileModal() {
-                if (!currentUser) return;
-                const rank = getRankFromUser(currentUser);
-                document.getElementById('profileContent').innerHTML = `<div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center text-3xl font-black text-black">${currentUser.fullName.charAt(0)}</div><div><h2 class="text-2xl font-bold">${currentUser.fullName}</h2><div class="text-white/50">@${currentUser.username || currentUser.email}</div></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${(currentUser.totalSpent||0).toLocaleString()}₫</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.name}</div></div></div>`;
-                document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('profileModal').classList.add('flex');
-            }
-
+            function showProfileModal() { if (!currentUser) return; const rank = getRankFromUser(currentUser); document.getElementById('profileContent').innerHTML = `<div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center text-3xl font-black text-black">${currentUser.fullName.charAt(0)}</div><div><h2 class="text-2xl font-bold">${currentUser.fullName}</h2><div class="text-white/50">@${currentUser.username || currentUser.email}</div></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${(currentUser.totalSpent||0).toLocaleString()}₫</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.name}</div></div></div>`; document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('profileModal').classList.add('flex'); }
             function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); document.getElementById('authModal').classList.add('flex'); }
             function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
             function openCartDrawer() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); }
             function closeCartDrawer() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); }
-            function showToast(msg, isErr = false) {
-                const toast = document.getElementById('toastMsg'); toast.innerText = isErr ? `⚠️ ${msg}` : `✨ ${msg}`;
-                toast.style.background = isErr ? '#8b2c2c' : '#1e2a1a'; toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2200);
+            function showToast(msg, isErr = false) { const toast = document.getElementById('toastMsg'); toast.innerText = isErr ? `⚠️ ${msg}` : `✨ ${msg}`; toast.style.background = isErr ? '#8b2c2c' : '#1e2a1a'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); }
+
+            // Render shop grid with filter & search
+            let currentFilter = "all";
+            function renderShopProducts(filter = "all", searchTerm = "") {
+                const container = document.getElementById('shopProductsGrid');
+                let filtered = allProducts.filter(p => filter === "all" ? true : p.category === filter);
+                if (searchTerm.trim() !== "") filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+                if (filtered.length === 0) { document.getElementById('noResultsMsg').classList.remove('hidden'); container.innerHTML = ""; return; }
+                document.getElementById('noResultsMsg').classList.add('hidden');
+                container.innerHTML = filtered.map(p => `<div class="product-card p-4 group fade-in"><div class="relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4"><img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/1a1c1c/abd600?text=Badminton'"/><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><button class="add-to-cart-btn bg-white text-black p-3 hover:bg-primary-fixed rounded-full" data-id="${p.id}"><span class="material-symbols-outlined">shopping_bag</span></button></div></div><div class="flex justify-between"><h3 class="font-headline-md text-headline-md">${p.name}</h3><p class="text-primary-fixed font-bold">${p.price.toLocaleString()} VND</p></div></div>`).join('');
+                document.querySelectorAll('.add-to-cart-btn').forEach(b => b.onclick = () => { const prod = allProducts.find(p => p.id == b.dataset.id); if(prod) addToCart(prod); });
             }
 
-            function renderProducts() {
-                const container = document.getElementById('productsContainer');
-                container.innerHTML = products.map(p => `<div class="product-card p-4 group"><div class="relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4"><img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><button class="add-to-cart-btn bg-white text-black p-3 hover:bg-primary-fixed rounded-full" data-id="${p.id}"><span class="material-symbols-outlined">shopping_bag</span></button></div></div><div class="flex justify-between"><h3 class="font-headline-md text-headline-md">${p.name}</h3><p class="text-primary-fixed font-bold">${p.price.toLocaleString()} VND</p></div></div>`).join('');
-                document.querySelectorAll('.add-to-cart-btn').forEach(b => b.onclick = () => addToCart(products.find(p => p.id == b.dataset.id)));
-            }
+            // Filter event listeners
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]'));
+                    chip.classList.add('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]');
+                    currentFilter = chip.dataset.filter;
+                    const searchVal = document.getElementById('searchInput')?.value || "";
+                    renderShopProducts(currentFilter, searchVal);
+                });
+            });
+            document.getElementById('searchInput')?.addEventListener('input', (e) => { renderShopProducts(currentFilter, e.target.value); });
+            
+            // Initialize
+            renderShopProducts("all", "");
+            const saved = JSON.parse(localStorage.getItem('apex_currentUser'));
+            if (saved && localStorage.getItem('apex_loggedIn') === 'true') { currentUser = saved; isLoggedIn = true; }
+            loadCart(); renderNavbarAvatar(); updateCartUI();
 
-            // Event Listeners
+            // Event bindings
             document.getElementById('cartIcon').onclick = openCartDrawer;
             document.getElementById('closeCartBtn').onclick = closeCartDrawer;
             document.getElementById('cartOverlay').onclick = closeCartDrawer;
@@ -400,16 +415,7 @@
             document.getElementById('modalLoginTab').onclick = () => { document.getElementById('modalLoginForm').classList.remove('hidden'); document.getElementById('modalRegisterForm').classList.add('hidden'); document.getElementById('modalLoginTab').classList.add('bg-primary-fixed','text-on-primary'); document.getElementById('modalRegisterTab').classList.remove('bg-primary-fixed','text-on-primary'); };
             document.getElementById('modalRegisterTab').onclick = () => { document.getElementById('modalRegisterForm').classList.remove('hidden'); document.getElementById('modalLoginForm').classList.add('hidden'); document.getElementById('modalRegisterTab').classList.add('bg-primary-fixed','text-on-primary'); document.getElementById('modalLoginTab').classList.remove('bg-primary-fixed','text-on-primary'); };
             document.getElementById('doModalLogin').onclick = () => { if (login(document.getElementById('modalEmail').value, document.getElementById('modalPassword').value)) closeAuthModal(); else showToast("Sai thông tin", true); };
-            document.getElementById('doModalRegister').onclick = () => {
-                const pw = document.getElementById('regPassword').value;
-                if (pw !== document.getElementById('regConfirm').value) { showToast("Mật khẩu không khớp", true); return; }
-                if (register(document.getElementById('regFullName').value, document.getElementById('regEmail').value, document.getElementById('regUsername').value, pw)) closeAuthModal();
-            };
-
-            // Init
-            const saved = JSON.parse(localStorage.getItem('apex_currentUser'));
-            if (saved && localStorage.getItem('apex_loggedIn') === 'true') { currentUser = saved; isLoggedIn = true; }
-            loadCart(); renderProducts(); renderNavbarAvatar(); updateCartUI();
+            document.getElementById('doModalRegister').onclick = () => { const pw = document.getElementById('regPassword').value; if (pw !== document.getElementById('regConfirm').value) { showToast("Mật khẩu không khớp", true); return; } if (register(document.getElementById('regFullName').value, document.getElementById('regEmail').value, document.getElementById('regUsername').value, pw)) closeAuthModal(); };
         })();
     </script>
 </body>

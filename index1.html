@@ -72,7 +72,7 @@
         }
         .input-dark {
             background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(171, 214, 0, 0.2);
-            transition: all 0.3s ease; color: rgb(0, 0, 0);
+            transition: all 0.3s ease; color: white;
         }
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
         .product-card {
@@ -136,12 +136,10 @@
         <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed">Apex Badminton Store</div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)] font-headline-md text-headline-md transition-all duration-150" href="#">Home</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="shoppage.html">Shop</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Courts</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Events</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Community</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed hover:dark:border-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="#">Support</a>
-            <input placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary transition-colors duration-300 font-headline-md text-headline-md" href="#">Shop</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary transition-colors duration-300 font-headline-md text-headline-md" href="#">Courts</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary transition-colors duration-300 font-headline-md text-headline-md" href="#">Events</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary transition-colors duration-300 font-headline-md text-headline-md" href="#">Community</a>
         </nav>
         <div class="flex items-center gap-6">
             <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
@@ -192,7 +190,7 @@
             </div>
         </section>
 
-        <!-- Founder's Corner & Why Choose Apex (keeping original sections) -->
+        <!-- Founder's Corner & Why Choose Apex -->
         <section class="py-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
             <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-16">
                 <div class="md:col-span-7 relative"><div class="aspect-[4/3] relative z-10"><img class="w-full h-full object-cover shadow-[40px_-40px_0px_rgba(171,214,0,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyfb0Ns5cyHRksWD1xMxysKsSub8d_m1Mz6Fz1j5fB6fxIBZuZJLdaoObVIzmwJCpoQ2QlAgApmnHg7lEWe1g--AquBtwkkgoO8SgyGwPBsXEj-63-WhkFk2nWY5JShkBOBWolXMefUkWMUovx0I2ua_WcrmxqZ1jnnCSIhawCVc2O-9rZTHB4dfgbCdZiJk7ToLl_mGEWzx59p4DldRIqB1a_luBKZLRaDcuYobAbBI0YSqHiEq3cbEW1nrWT82nlKwfLfByoYzI" /></div></div>
@@ -316,11 +314,11 @@
 
             function saveCart() { localStorage.setItem('apex_cart', JSON.stringify(cart)); }
             function loadCart() { cart = JSON.parse(localStorage.getItem('apex_cart') || '[]'); updateCartUI(); }
-            function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); showToast(`➕ ${product.name} vào giỏ`); }
+            function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); }
             function updateCartUI() {
                 document.getElementById('cartCountBadge').innerText = cart.reduce((s,i) => s + i.quantity, 0);
                 const container = document.getElementById('cartItemsList');
-                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
+                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">Giỏ hàng trống</div>'; updateCartTotals(); return; }
                 container.innerHTML = cart.map((item, idx) => `<div class="flex gap-3 bg-black/30 p-2 rounded-xl"><img src="${item.image}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="font-bold">${item.name}</div><div class="text-[#abd600]">${item.price.toLocaleString()}₫</div><div class="flex items-center gap-2 mt-1"><button class="minus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">-</button><span>${item.quantity}</span><button class="plus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">+</button><button class="remove-item text-red-400 text-sm ml-2" data-idx="${idx}">Xóa</button></div></div></div>`).join('');
                 attachCartEvents(); updateCartTotals(); saveCart();
             }
@@ -341,15 +339,21 @@
             function completePurchase(totalSpentNow) {
                 if (!isLoggedIn) { showToast("Đăng nhập để thanh toán", true); openAuthModal(); return false; }
                 if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return false; }
+                
+                // Cập nhật thông tin người dùng
                 currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow;
                 currentUser.totalOrders = (currentUser.totalOrders || 0) + 1;
                 updateUserInStorage(currentUser);
+                
+                // Hiệu ứng pháo giấy
+                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng.`);
+                
+                // Xóa giỏ hàng và cập nhật giao diện
                 cart = [];
                 saveCart();
                 updateCartUI();
                 closeCartDrawer();
-                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`);
                 renderNavbarAvatar();
                 return true;
             }
@@ -369,7 +373,7 @@
             function showProfileModal() {
                 if (!currentUser) return;
                 const rank = getRankFromUser(currentUser);
-                document.getElementById('profileContent').innerHTML = `<div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center text-3xl font-black text-black">${currentUser.fullName.charAt(0)}</div><div><h2 class="text-2xl font-bold">${currentUser.fullName}</h2><div class="text-white/50">@${currentUser.username || currentUser.email}</div></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${(currentUser.totalSpent||0).toLocaleString()}₫</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.name}</div></div></div>`;
+                document.getElementById('profileContent').innerHTML = `<div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center text-3xl font-black text-black">${currentUser.fullName.charAt(0)}</div><div><h2 class="text-2xl font-bold">${currentUser.fullName}</h2><div class="text-white/50">@${currentUser.username || currentUser.email}</div></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${(currentUser.totalSpent||0).toLocaleString()}₫</div><div class="text-xs">Tổng chi tiêu</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${currentUser.totalOrders||0}</div><div class="text-xs">Đơn hàng</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.name}</div><div class="text-xs">Cấp độ</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.discount}%</div><div class="text-xs">Giảm giá</div></div></div>`;
                 document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('profileModal').classList.add('flex');
             }
 
@@ -393,17 +397,28 @@
             document.getElementById('cartIcon').onclick = openCartDrawer;
             document.getElementById('closeCartBtn').onclick = closeCartDrawer;
             document.getElementById('cartOverlay').onclick = closeCartDrawer;
-            document.getElementById('checkoutBtn').onclick = () => { if (cart.length) completePurchase(cart.reduce((s,i)=> s + i.price*i.quantity,0)); else showToast("Giỏ hàng trống", true); };
+            document.getElementById('checkoutBtn').onclick = () => { 
+                if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return; }
+                const totalAmount = cart.reduce((s,i) => s + i.price * i.quantity, 0);
+                completePurchase(totalAmount); 
+            };
             document.getElementById('closeProfileBtn').onclick = () => document.getElementById('profileModal').classList.add('hidden');
             document.getElementById('logoutFromProfileBtn').onclick = () => { logout(); document.getElementById('profileModal').classList.add('hidden'); closeAuthModal(); };
             document.getElementById('closeAuthModal').onclick = closeAuthModal;
             document.getElementById('modalLoginTab').onclick = () => { document.getElementById('modalLoginForm').classList.remove('hidden'); document.getElementById('modalRegisterForm').classList.add('hidden'); document.getElementById('modalLoginTab').classList.add('bg-primary-fixed','text-on-primary'); document.getElementById('modalRegisterTab').classList.remove('bg-primary-fixed','text-on-primary'); };
             document.getElementById('modalRegisterTab').onclick = () => { document.getElementById('modalRegisterForm').classList.remove('hidden'); document.getElementById('modalLoginForm').classList.add('hidden'); document.getElementById('modalRegisterTab').classList.add('bg-primary-fixed','text-on-primary'); document.getElementById('modalLoginTab').classList.remove('bg-primary-fixed','text-on-primary'); };
-            document.getElementById('doModalLogin').onclick = () => { if (login(document.getElementById('modalEmail').value, document.getElementById('modalPassword').value)) closeAuthModal(); else showToast("Sai thông tin", true); };
+            document.getElementById('doModalLogin').onclick = () => { if (login(document.getElementById('modalEmail').value, document.getElementById('modalPassword').value)) closeAuthModal(); else showToast("Sai thông tin đăng nhập", true); };
             document.getElementById('doModalRegister').onclick = () => {
                 const pw = document.getElementById('regPassword').value;
-                if (pw !== document.getElementById('regConfirm').value) { showToast("Mật khẩu không khớp", true); return; }
-                if (register(document.getElementById('regFullName').value, document.getElementById('regEmail').value, document.getElementById('regUsername').value, pw)) closeAuthModal();
+                const confirmPw = document.getElementById('regConfirm').value;
+                const fullName = document.getElementById('regFullName').value;
+                const email = document.getElementById('regEmail').value;
+                const username = document.getElementById('regUsername').value;
+                
+                if (!fullName || !email || !username || !pw) { showToast("Vui lòng điền đầy đủ thông tin", true); return; }
+                if (pw.length < 6) { showToast("Mật khẩu phải có ít nhất 6 ký tự", true); return; }
+                if (pw !== confirmPw) { showToast("Mật khẩu xác nhận không khớp", true); return; }
+                if (register(fullName, email, username, pw)) closeAuthModal();
             };
 
             // Init
