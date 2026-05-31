@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
-    <title>Apex Badminton Store | Shop Premium Gear</title>
+    <title>Apex Badminton Store | Events & Tournaments</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <style>
-        /* ===== CORE CSS CONCEPT (THEME + GLASS + NEON + SCROLLBAR + CART) ===== */
+        /* ===== CORE CSS CONCEPT (SAME AS ALL PAGES) ===== */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -75,27 +75,77 @@
             transition: all 0.3s ease; color: white;
         }
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
-        .product-card {
-            background: #1e2020; border-radius: 24px; transition: 0.25s; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .product-card:hover { transform: translateY(-6px); border-color: #abd60040; box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* shop page additional polish */
-        .shop-hero {
-            background: radial-gradient(circle at 20% 30%, rgba(171,214,0,0.08), transparent 70%);
+        /* Events Card Styles */
+        .event-card {
+            background: #1e2020;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
         }
-        .filter-chip {
-            background: rgba(30,30,30,0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(171,214,0,0.2);
-            transition: all 0.2s;
+        .event-card:hover {
+            transform: translateY(-8px);
+            border-color: #abd60040;
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
         }
-        .filter-chip.active, .filter-chip:hover {
-            border-color: #abd600;
-            background: rgba(171,214,0,0.2);
+        .event-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(171,214,0,0.9);
+            color: #1a2a00;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            backdrop-filter: blur(4px);
+        }
+        .countdown-timer {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 8px 16px;
+        }
+        .filter-tab {
+            transition: all 0.3s;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .filter-tab.active {
             color: #abd600;
+            border-bottom-color: #abd600;
+        }
+        .filter-tab:hover:not(.active) {
+            border-bottom-color: rgba(171,214,0,0.3);
+            color: rgba(171,214,0,0.8);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .events-hero {
+            background: radial-gradient(ellipse at 50% 30%, rgba(171,214,0,0.15), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        .events-hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(45deg, rgba(171,214,0,0.03) 0px, rgba(171,214,0,0.03) 2px, transparent 2px, transparent 8px);
+            animation: drift 20s linear infinite;
+        }
+        @keyframes drift {
+            from { transform: translateX(-20%) translateY(-20%) rotate(0deg); }
+            to { transform: translateX(20%) translateY(20%) rotate(360deg); }
         }
     </style>
     <script id="tailwind-config">
@@ -147,17 +197,16 @@
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 
-    <!-- TopNavBar (identical style, active shop) -->
+    <!-- TopNavBar -->
     <header class="bg-surface/80 backdrop-blur-md dark:bg-surface-container-lowest/80 font-headline-md text-headline-md border-b border-white/10 shadow-[0_0_20px_rgba(171,214,0,0.15)] flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50 sticky top-0">
         <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed cursor-pointer" onclick="window.location.href='#'">Apex Badminton Store</div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="index.html">Home</a>
-            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)]" href="shoppage.html">Shop</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="courtspage.html">Courts</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="eventspage.html">Events</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="communitypage.html">Community</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="supportpage.html">Support</a>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="shoppage.html">Shop</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="courtspage.html">Courts</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="communitypage.html">Community</a>
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)]" href="eventspage.html">Events</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="#">Support</a>
         </nav>
         <div class="flex items-center gap-6">
             <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
@@ -169,37 +218,67 @@
     </header>
 
     <main class="fade-in">
-        <!-- SHOP HERO SECTION (premium vibe) -->
-        <section class="shop-hero relative w-full py-20 md:py-28 px-margin-mobile md:px-margin-desktop border-b border-white/5">
-            <div class="max-w-container-max mx-auto text-center">
-                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase bg-white/5 px-4 py-1 rounded-full inline-block mb-4 neon-pulse">Official Gear</span>
-                <h1 class="font-display-lg text-[56px] md:text-[88px] uppercase text-primary-fixed leading-none tracking-tighter mb-6">SHOP <span class="text-white">COLLECTION</span></h1>
-                <p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mb-8">Vợt cao cấp, giày chuyên nghiệp & phụ kiện đẳng cấp thế giới</p>
-                <div class="flex justify-center gap-4 flex-wrap">
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer active" data-filter="all">Tất cả</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="rackets">Vợt cầu lông</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shoes">Giày chuyên dụng</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shuttles">Cầu lông</div>
-                </div>
+        <!-- EVENTS HERO SECTION -->
+        <section class="events-hero relative w-full py-24 md:py-32 px-margin-mobile md:px-margin-desktop">
+            <div class="relative z-10 max-w-container-max mx-auto text-center">
+                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase bg-black/30 px-4 py-2 rounded-full inline-block mb-6 backdrop-blur-sm neon-pulse">Upcoming & Past Events</span>
+                <h1 class="font-display-lg text-6xl md:text-8xl uppercase text-primary-fixed leading-none tracking-tighter mb-6">TOURNAMENTS</h1>
+                <h1 class="font-display-lg text-5xl md:text-7xl uppercase text-white leading-none tracking-tighter">& EVENTS</h1>
+                <p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mt-8">Tham gia các giải đấu, workshop và sự kiện cộng đồng do Apex tổ chức</p>
             </div>
         </section>
 
-        <!-- PRODUCTS GRID - FULL SHOP PAGE -->
+        <!-- FILTER TABS -->
+        <section class="sticky top-20 z-40 bg-surface-container-low/80 backdrop-blur-md border-b border-white/10 py-4 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto flex justify-center gap-8 md:gap-12">
+                <div class="filter-tab active text-lg font-semibold" data-filter="upcoming">Sắp diễn ra</div>
+                <div class="filter-tab text-lg font-semibold" data-filter="ongoing">Đang diễn ra</div>
+                <div class="filter-tab text-lg font-semibold" data-filter="past">Đã kết thúc</div>
+            </div>
+        </section>
+
+        <!-- EVENTS GRID -->
         <section class="py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
             <div class="max-w-container-max mx-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter" id="shopProductsGrid"></div>
-                <div id="noResultsMsg" class="text-center py-16 hidden">
-                    <span class="material-symbols-outlined text-5xl text-white/30">search_off</span>
-                    <p class="mt-2 text-white/50">Không tìm thấy sản phẩm phù hợp</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="eventsGrid"></div>
+                <div id="noEventsMsg" class="text-center py-16 hidden">
+                    <span class="material-symbols-outlined text-6xl text-white/30">event_busy</span>
+                    <p class="mt-4 text-white/50">Không có sự kiện nào trong mục này</p>
                 </div>
             </div>
         </section>
 
-        <!-- BANNER FLASH SALE (glass-card extension) -->
-        <section class="py-16 px-margin-mobile md:px-margin-desktop">
-            <div class="max-w-container-max mx-auto glass-card rounded-3xl p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 border border-[#abd60020]">
-                <div><h3 class="font-headline-lg text-headline-lg text-primary-fixed">⚡ FLASH SALE</h3><p class="text-on-surface-variant">Giảm đến 15% cho thành viên Diamond</p></div>
-                <div class="flex gap-3"><span class="bg-black/50 px-5 py-2 rounded-full font-mono text-2xl font-bold text-primary-fixed">24</span><span class="text-white/70">giờ</span></div>
+        <!-- FEATURED TOURNAMENT SPOTLIGHT -->
+        <section class="py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-low">
+            <div class="max-w-container-max mx-auto">
+                <div class="glass-card rounded-3xl overflow-hidden md:flex">
+                    <div class="md:w-1/2 h-80 md:h-auto">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop" class="w-full h-full object-cover" alt="Championship">
+                    </div>
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <div class="inline-block bg-primary-fixed/20 text-primary-fixed px-4 py-1 rounded-full text-sm font-bold mb-4">🏆 GIẢI ĐẤU LỚN NHẤT NĂM</div>
+                        <h2 class="font-headline-lg text-3xl md:text-4xl mb-4">APEX Championship 2025</h2>
+                        <p class="text-white/70 mb-6">Giải đấu thường niên với tổng giải thưởng lên đến 500,000,000 VND. Quy tụ các tay vợt hàng đầu cả nước.</p>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-3 text-white/60"><span class="material-symbols-outlined text-primary-fixed">calendar_today</span> 15 - 20 Tháng 3, 2025</div>
+                            <div class="flex items-center gap-3 text-white/60"><span class="material-symbols-outlined text-primary-fixed">location_on</span> Nhà thi đấu Quận 7, TP.HCM</div>
+                            <div class="flex items-center gap-3 text-white/60"><span class="material-symbols-outlined text-primary-fixed">sports_tennis</span> Đơn nam, đơn nữ, đôi nam, đôi nữ, đôi hỗn hợp</div>
+                        </div>
+                        <button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform shadow-lg">Đăng ký ngay →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REGISTRATION FORM (Sample) -->
+        <section class="py-20 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto text-center">
+                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Get Involved</span>
+                <h2 class="font-headline-lg text-headline-lg md:text-5xl uppercase mb-8">Đăng ký nhận thông báo sự kiện</h2>
+                <div class="max-w-md mx-auto flex gap-4">
+                    <input type="email" placeholder="Email của bạn" class="input-dark flex-1 px-6 py-3 rounded-full">
+                    <button class="bg-primary-fixed text-on-primary-fixed px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">Đăng ký</button>
+                </div>
             </div>
         </section>
     </main>
@@ -209,7 +288,7 @@
         <div class="flex gap-8"><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Support</a><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Warranty</a></div>
     </footer>
 
-    <!-- Cart Drawer + Overlay -->
+    <!-- Cart Drawer -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-drawer" id="cartDrawer">
         <div class="flex justify-between items-center pb-4 border-b border-white/10">
@@ -230,7 +309,7 @@
         <div class="modal-glass rounded-3xl w-[90%] max-w-lg p-6 border border-[#abd600]/30 shadow-2xl">
             <div class="flex justify-between items-center border-b border-white/10 pb-3"><h3 class="text-xl font-bold"><span class="material-symbols-outlined text-[#abd600]">account_circle</span> Hồ sơ thành viên</h3><span id="closeProfileBtn" class="material-symbols-outlined cursor-pointer hover:text-[#abd600]">close</span></div>
             <div id="profileContent" class="py-5 space-y-4"></div>
-            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition" >Đăng xuất</button>
+            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition">Đăng xuất</button>
         </div>
     </div>
 
@@ -264,22 +343,184 @@
 
     <script>
         (function() {
+            // Events Data
+            const events = [
+                {
+                    id: 1,
+                    name: "APEX OPEN 2025",
+                    type: "upcoming",
+                    date: "2025-03-15",
+                    dateEnd: "2025-03-20",
+                    location: "Nhà thi đấu Quận 7, TP.HCM",
+                    prize: "500,000,000 VND",
+                    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop",
+                    status: "upcoming",
+                    spots: 128,
+                    registered: 89
+                },
+                {
+                    id: 2,
+                    name: "Weekend Training Camp",
+                    type: "upcoming",
+                    date: "2025-02-22",
+                    location: "Apex Training Center",
+                    coach: "Nguyễn Tiến Minh",
+                    image: "https://images.unsplash.com/photo-1613918431708-1fe89e68b0b8?w=600&h=400&fit=crop",
+                    status: "upcoming",
+                    spots: 30,
+                    registered: 18
+                },
+                {
+                    id: 3,
+                    name: "Youth Championship",
+                    type: "ongoing",
+                    date: "2025-02-10",
+                    dateEnd: "2025-02-15",
+                    location: "Hà Nội",
+                    image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&h=400&fit=crop",
+                    status: "ongoing",
+                    category: "U-18"
+                },
+                {
+                    id: 4,
+                    name: "Apex Community Cup",
+                    type: "past",
+                    date: "2025-01-20",
+                    location: "Đà Nẵng",
+                    winner: "Đội Apex Hà Nội",
+                    image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&h=400&fit=crop",
+                    status: "past"
+                },
+                {
+                    id: 5,
+                    name: "Pro Coach Workshop",
+                    type: "upcoming",
+                    date: "2025-03-05",
+                    location: "TP.HCM (Online & Offline)",
+                    coach: "International Coach",
+                    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=400&fit=crop",
+                    status: "upcoming",
+                    spots: 50,
+                    registered: 32
+                },
+                {
+                    id: 6,
+                    name: "Summer League 2025",
+                    type: "upcoming",
+                    date: "2025-04-01",
+                    dateEnd: "2025-05-30",
+                    location: "Toàn quốc",
+                    prize: "1,000,000,000 VND",
+                    image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600&h=400&fit=crop",
+                    status: "upcoming",
+                    spots: 256,
+                    registered: 145
+                },
+                {
+                    id: 7,
+                    name: "Holiday Special Tournament",
+                    type: "past",
+                    date: "2024-12-25",
+                    location: "TP.HCM",
+                    image: "https://images.unsplash.com/photo-1613918431708-1fe89e68b0b8?w=600&h=400&fit=crop",
+                    status: "past"
+                }
+            ];
+
+            let currentFilter = "upcoming";
+
+            function renderEvents(filter) {
+                const container = document.getElementById('eventsGrid');
+                const filtered = events.filter(e => e.status === filter);
+                
+                if (filtered.length === 0) {
+                    document.getElementById('noEventsMsg').classList.remove('hidden');
+                    container.innerHTML = "";
+                    return;
+                }
+                
+                document.getElementById('noEventsMsg').classList.add('hidden');
+                
+                container.innerHTML = filtered.map(event => {
+                    const eventDate = new Date(event.date);
+                    const formattedDate = eventDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    const statusBadge = event.status === 'upcoming' ? 'Sắp diễn ra' : (event.status === 'ongoing' ? 'Đang diễn ra' : 'Đã kết thúc');
+                    const badgeColor = event.status === 'upcoming' ? 'bg-primary-fixed/20 text-primary-fixed' : (event.status === 'ongoing' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-500/20 text-gray-400');
+                    
+                    return `
+                        <div class="event-card group fade-in">
+                            <div class="relative h-56 overflow-hidden">
+                                <img src="${event.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <div class="event-badge ${badgeColor}">${statusBadge}</div>
+                                ${event.status === 'upcoming' && event.spots ? `
+                                    <div class="absolute bottom-4 left-4 right-4">
+                                        <div class="bg-black/60 backdrop-blur-sm rounded-lg p-2 text-xs">
+                                            <div class="flex justify-between text-white">
+                                                <span>Đã đăng ký: ${event.registered}/${event.spots}</span>
+                                                <span class="text-primary-fixed">${Math.round((event.registered/event.spots)*100)}%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-700 rounded-full h-1.5 mt-1">
+                                                <div class="bg-primary-fixed h-1.5 rounded-full" style="width: ${(event.registered/event.spots)*100}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-headline-md text-xl mb-2 group-hover:text-primary-fixed transition-colors">${event.name}</h3>
+                                <div class="space-y-2 text-sm text-white/60 mb-4">
+                                    <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">calendar_today</span> ${formattedDate} ${event.dateEnd ? ` - ${new Date(event.dateEnd).toLocaleDateString('vi-VN')}` : ''}</div>
+                                    <div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">location_on</span> ${event.location}</div>
+                                    ${event.prize ? `<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">emoji_events</span> ${event.prize}</div>` : ''}
+                                    ${event.coach ? `<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">school</span> HLV: ${event.coach}</div>` : ''}
+                                    ${event.winner ? `<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm">workspace_premium</span> Vô địch: ${event.winner}</div>` : ''}
+                                </div>
+                                <button class="register-btn w-full py-2 rounded-full border border-primary-fixed/50 text-primary-fixed font-semibold hover:bg-primary-fixed hover:text-black transition-all duration-300" data-id="${event.id}" data-name="${event.name}" data-status="${event.status}">
+                                    ${event.status === 'upcoming' ? 'Đăng ký tham gia' : (event.status === 'ongoing' ? 'Theo dõi trực tiếp' : 'Xem kết quả')}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Add event listeners for register buttons
+                document.querySelectorAll('.register-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const status = btn.dataset.status;
+                        const eventName = btn.dataset.name;
+                        if (status === 'upcoming') {
+                            showToast(`✨ Đã đăng ký tham gia ${eventName}! Vui lòng kiểm tra email.`);
+                            canvasConfetti({ particleCount: 80, spread: 50, origin: { y: 0.6 } });
+                        } else if (status === 'ongoing') {
+                            showToast(`🎥 Đang chuyển hướng đến trang theo dõi sự kiện...`);
+                        } else {
+                            showToast(`📊 Đang tải kết quả giải đấu...`);
+                        }
+                    });
+                });
+            }
+
+            // Filter tabs functionality
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    renderEvents(currentFilter);
+                });
+            });
+
+            // Cart and Auth Logic (same as before)
             let currentUser = null;
             let isLoggedIn = false;
             let cart = [];
-
-            // Expanded product list
-            const allProducts = [
-                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB07J8wB7znBWKx-QPKBh615R5pr9kZv28QDfcGpAb_HHTajx2K1gdyCL5bgDR8k17N_3r4n2yuWB7SH2Ce4uKCuraGs2hL2qqf_jXmbwV_4-epjjPMtjowVll8xyzsVt1FdiAmqQzGKboQD3yMdbZlEwsGPvGD-XLmOXIGP0N0cpA2bpIZDfGWODZH6iIErd74DAh7eTAx71znIfqmww3T58nLFbGinRYoL2_ohR7irH05xO_0P11DuMOz7t3s2tZBw7l0Kp83J4w", category: "rackets" },
-                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAXIaH8Ht_-vP2qByitDWqFdnVmW3B1Adf_9vjDY4uo44yd1udtTFe-VWCSPZwDibEl-NzSIpdAOnwa7PhoQNS2ziULS7MSz7JCn3yMw4TeQtgwKdEvIx5RwRX9iqWOXfIC50ipXLub8fN5DixkIkijbA9s7e3k0YbXnYCeAZFF5tFtmmUJ4iPQ5iPKPxWTlc7DHlw7zPb1AdT_ScLNIs8g0tEL5qdI1BZMGopN17YHS2Zk-wcmQdH_9AosnV7lZQ0lCMG-eH8TMoY", category: "shoes" },
-                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB7c74ZgDEPg8MaTnB7AMffzRDpEyczDPJgtu01d4Zq6dGuOzUf0UFPxfW5PgVe_a0Bpx9V6otveElsg6iYlTblwcJidaMqChx7sL7adhz98Sl35PX54zYmQVxgq5o0xR99hXs1HHT5xhGBIQQx4bI65KLH8I7f33xn2i4MfQF7kIOK8owH3d6x1uCXugumJatjyaJw5JfjWHs-Uu6W8tF97clupqbv8X8M2mhRupmA6WMvT65JlQSpXFwl4LnA3ZImUDaOVKPYQO4", category: "shuttles" },
-                { id: 4, name: "Carbon X-Treme Racket", price: 5200000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "rackets" },
-                { id: 5, name: "Swift Claw 3.0 Shoes", price: 3100000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop", category: "shoes" },
-                { id: 6, name: "Tournament Grade Shuttles (12pcs)", price: 690000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "shuttles" },
-                { id: 7, name: "Apex Pro Backpack", price: 1250000, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop", category: "accessories" },
-                { id: 8, name: "Elite Grip Towel", price: 290000, image: "https://images.unsplash.com/photo-1617206658066-8c191f4e2fa8?w=400&h=400&fit=crop", category: "accessories" }
+            
+            const shopProducts = [
+                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=100&h=100&fit=crop" },
+                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop" },
+                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=100&h=100&fit=crop" }
             ];
-
+            
             function getRankFromUser(user) {
                 const spent = user?.totalSpent || 0;
                 if (spent >= 30000000) return { name: "Diamond", discount: 15, icon: "diamond" };
@@ -287,7 +528,7 @@
                 if (spent >= 5000000) return { name: "Silver", discount: 5, icon: "stars" };
                 return { name: "Bronze", discount: 2, icon: "emoji_events" };
             }
-
+            
             function saveUsers(users) { localStorage.setItem('apex_users', JSON.stringify(users)); }
             function loadUsers() { return JSON.parse(localStorage.getItem('apex_users') || '[]'); }
             function saveCurrentUser() {
@@ -301,16 +542,16 @@
             function login(email, password) { const users = loadUsers(); const user = users.find(u => u.email === email && u.password === password); if (user) { currentUser = { ...user, totalSpent: user.totalSpent || 0, totalOrders: user.totalOrders || 0 }; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); updateCartUI(); showToast(`Chào ${user.fullName}!`); return true; } return false; }
             function register(fullName, email, username, password) { let users = loadUsers(); if (users.find(u => u.email === email)) { showToast("Email đã tồn tại!", true); return false; } const newUser = { id: Date.now(), fullName, email, username, password, totalSpent: 0, totalOrders: 0 }; users.push(newUser); saveUsers(users); currentUser = newUser; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Đăng ký thành công!`); return true; }
             function logout() { isLoggedIn = false; currentUser = null; saveCurrentUser(); renderNavbarAvatar(); cart = []; saveCart(); updateCartUI(); document.getElementById('profileModal').classList.add('hidden'); }
-
+            
             function saveCart() { localStorage.setItem('apex_cart', JSON.stringify(cart)); }
             function loadCart() { cart = JSON.parse(localStorage.getItem('apex_cart') || '[]'); updateCartUI(); }
             function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); showToast(`➕ ${product.name} vào giỏ`); }
             function updateCartUI() {
                 document.getElementById('cartCountBadge').innerText = cart.reduce((s,i) => s + i.quantity, 0);
                 const container = document.getElementById('cartItemsList');
-                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">🛒 Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
+                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">🛒 Giỏ hàng trống</div>'; updateCartTotals(); return; }
                 container.innerHTML = cart.map((item, idx) => `<div class="flex gap-3 bg-black/30 p-2 rounded-xl"><img src="${item.image}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="font-bold">${item.name}</div><div class="text-[#abd600]">${item.price.toLocaleString()}₫</div><div class="flex items-center gap-2 mt-1"><button class="minus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">-</button><span>${item.quantity}</span><button class="plus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">+</button><button class="remove-item text-red-400 text-sm ml-2" data-idx="${idx}">Xóa</button></div></div></div>`).join('');
-                attachCartEvents(); updateCartTotals(); saveCart();
+                attachCartEvents(); updateCartTotals();
             }
             function attachCartEvents() {
                 document.querySelectorAll('.minus-item').forEach(b => b.onclick = () => { let i = b.dataset.idx; if (cart[i].quantity > 1) cart[i].quantity--; else cart.splice(i,1); updateCartUI(); });
@@ -326,41 +567,7 @@
                 document.getElementById('cartTotalFinal').innerText = (subtotal - discountAmount).toLocaleString() + '₫';
                 document.getElementById('cartDiscountLine').style.display = discountPercent > 0 ? 'flex' : 'none';
             }
-            
-            // FIXED: Complete purchase function - clears cart properly
-            function completePurchase(totalSpentNow) { 
-                if (!isLoggedIn) { 
-                    showToast("Đăng nhập để thanh toán", true); 
-                    openAuthModal(); 
-                    return false; 
-                } 
-                
-                if (cart.length === 0) {
-                    showToast("Giỏ hàng trống!", true);
-                    return false;
-                }
-                
-                // Update user spending
-                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; 
-                currentUser.totalOrders = (currentUser.totalOrders || 0) + 1; 
-                updateUserInStorage(currentUser); 
-                
-                // Clear cart
-                cart = []; 
-                saveCart(); 
-                updateCartUI(); // Refresh cart display
-                
-                // Close cart drawer
-                closeCartDrawer(); 
-                
-                // Celebration effects
-                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); 
-                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`); 
-                
-                // Update user rank display
-                renderNavbarAvatar(); 
-                return true; 
-            }
+            function completePurchase(totalSpentNow) { if (!isLoggedIn) { showToast("Đăng nhập để thanh toán", true); openAuthModal(); return false; } if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return false; } currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; currentUser.totalOrders = (currentUser.totalOrders || 0) + 1; updateUserInStorage(currentUser); cart = []; saveCart(); updateCartUI(); closeCartDrawer(); canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); showToast(`✅ Thanh toán thành công!`); renderNavbarAvatar(); return true; }
             
             function renderNavbarAvatar() {
                 const container = document.getElementById('userNavSection');
@@ -373,38 +580,13 @@
             function openCartDrawer() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); }
             function closeCartDrawer() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); }
             function showToast(msg, isErr = false) { const toast = document.getElementById('toastMsg'); toast.innerText = isErr ? `⚠️ ${msg}` : `✨ ${msg}`; toast.style.background = isErr ? '#8b2c2c' : '#1e2a1a'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); }
-
-            // Render shop grid with filter & search
-            let currentFilter = "all";
-            function renderShopProducts(filter = "all", searchTerm = "") {
-                const container = document.getElementById('shopProductsGrid');
-                let filtered = allProducts.filter(p => filter === "all" ? true : p.category === filter);
-                if (searchTerm.trim() !== "") filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
-                if (filtered.length === 0) { document.getElementById('noResultsMsg').classList.remove('hidden'); container.innerHTML = ""; return; }
-                document.getElementById('noResultsMsg').classList.add('hidden');
-                container.innerHTML = filtered.map(p => `<div class="product-card p-4 group fade-in"><div class="relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4"><img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/1a1c1c/abd600?text=Badminton'"/><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><button class="add-to-cart-btn bg-white text-black p-3 hover:bg-primary-fixed rounded-full" data-id="${p.id}"><span class="material-symbols-outlined">shopping_bag</span></button></div></div><div class="flex justify-between"><h3 class="font-headline-md text-headline-md">${p.name}</h3><p class="text-primary-fixed font-bold">${p.price.toLocaleString()} VND</p></div></div>`).join('');
-                document.querySelectorAll('.add-to-cart-btn').forEach(b => b.onclick = () => { const prod = allProducts.find(p => p.id == b.dataset.id); if(prod) addToCart(prod); });
-            }
-
-            // Filter event listeners
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]'));
-                    chip.classList.add('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]');
-                    currentFilter = chip.dataset.filter;
-                    const searchVal = document.getElementById('searchInput')?.value || "";
-                    renderShopProducts(currentFilter, searchVal);
-                });
-            });
-            document.getElementById('searchInput')?.addEventListener('input', (e) => { renderShopProducts(currentFilter, e.target.value); });
             
             // Initialize
-            renderShopProducts("all", "");
+            renderEvents("upcoming");
             const saved = JSON.parse(localStorage.getItem('apex_currentUser'));
             if (saved && localStorage.getItem('apex_loggedIn') === 'true') { currentUser = saved; isLoggedIn = true; }
             loadCart(); renderNavbarAvatar(); updateCartUI();
-
-            // Event bindings
+            
             document.getElementById('cartIcon').onclick = openCartDrawer;
             document.getElementById('closeCartBtn').onclick = closeCartDrawer;
             document.getElementById('cartOverlay').onclick = closeCartDrawer;

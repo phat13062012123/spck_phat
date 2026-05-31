@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
-    <title>Apex Badminton Store | Shop Premium Gear</title>
+    <title>Apex Badminton Store | Community Hub</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Inter:wght@400;500;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <style>
-        /* ===== CORE CSS CONCEPT (THEME + GLASS + NEON + SCROLLBAR + CART) ===== */
+        /* ===== CORE CSS CONCEPT (SAME AS MAIN PAGES) ===== */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -75,27 +75,112 @@
             transition: all 0.3s ease; color: white;
         }
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
-        .product-card {
-            background: #1e2020; border-radius: 24px; transition: 0.25s; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .product-card:hover { transform: translateY(-6px); border-color: #abd60040; box-shadow: 0 20px 25px -12px rgba(0,0,0,0.4); }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* shop page additional polish */
-        .shop-hero {
-            background: radial-gradient(circle at 20% 30%, rgba(171,214,0,0.08), transparent 70%);
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 32px;
         }
-        .filter-chip {
-            background: rgba(30,30,30,0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(171,214,0,0.2);
-            transition: all 0.2s;
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .filter-chip.active, .filter-chip:hover {
-            border-color: #abd600;
-            background: rgba(171,214,0,0.2);
-            color: #abd600;
+        .carousel-slide {
+            flex: 0 0 100%;
+            position: relative;
+            height: 600px;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 20;
+            border: 1px solid rgba(171,214,0,0.3);
+        }
+        .carousel-btn:hover {
+            background: #abd600;
+            color: black;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .carousel-btn.prev { left: 24px; }
+        .carousel-btn.next { right: 24px; }
+        .carousel-dots {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .carousel-dot.active {
+            background: #abd600;
+            width: 24px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(171,214,0,0.6);
+        }
+        .carousel-dot:hover {
+            background: #abd600;
+            transform: scale(1.2);
+        }
+        
+        .post-card {
+            background: #1e2020;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .post-card:hover {
+            transform: translateY(-4px);
+            border-color: #abd60040;
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.5);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .community-hero {
+            background: radial-gradient(ellipse at 50% 30%, rgba(171,214,0,0.12), transparent 70%);
         }
     </style>
     <script id="tailwind-config">
@@ -147,17 +232,16 @@
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 
-    <!-- TopNavBar (identical style, active shop) -->
+    <!-- TopNavBar -->
     <header class="bg-surface/80 backdrop-blur-md dark:bg-surface-container-lowest/80 font-headline-md text-headline-md border-b border-white/10 shadow-[0_0_20px_rgba(171,214,0,0.15)] flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50 sticky top-0">
         <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed cursor-pointer" onclick="window.location.href='#'">Apex Badminton Store</div>
         <nav class="hidden md:flex items-center gap-8">
             <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="index.html">Home</a>
-            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)]" href="shoppage.html">Shop</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="courtspage.html">Courts</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="shoppage.html">Shop</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300" href="courtspage.html">Courts</a>
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)]" href="communitypage.html">Community</a>
             <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="eventspage.html">Events</a>
-            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="communitypage.html">Community</a>
             <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors" href="supportpage.html">Support</a>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
         </nav>
         <div class="flex items-center gap-6">
             <div id="cartIcon" class="relative cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
@@ -169,37 +253,182 @@
     </header>
 
     <main class="fade-in">
-        <!-- SHOP HERO SECTION (premium vibe) -->
-        <section class="shop-hero relative w-full py-20 md:py-28 px-margin-mobile md:px-margin-desktop border-b border-white/5">
-            <div class="max-w-container-max mx-auto text-center">
-                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase bg-white/5 px-4 py-1 rounded-full inline-block mb-4 neon-pulse">Official Gear</span>
-                <h1 class="font-display-lg text-[56px] md:text-[88px] uppercase text-primary-fixed leading-none tracking-tighter mb-6">SHOP <span class="text-white">COLLECTION</span></h1>
-                <p class="text-on-surface-variant text-body-lg max-w-2xl mx-auto mb-8">Vợt cao cấp, giày chuyên nghiệp & phụ kiện đẳng cấp thế giới</p>
-                <div class="flex justify-center gap-4 flex-wrap">
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer active" data-filter="all">Tất cả</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="rackets">Vợt cầu lông</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shoes">Giày chuyên dụng</div>
-                    <div class="filter-chip px-6 py-2 rounded-full text-sm font-semibold cursor-pointer" data-filter="shuttles">Cầu lông</div>
+        <!-- AUTO-PLAYING CAROUSEL SECTION -->
+        <section class="relative w-full community-hero pb-8">
+            <div class="max-w-[1400px] mx-auto px-margin-mobile md:px-margin-desktop">
+                <div class="carousel-container relative">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Slide 1 -->
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1400&h=600&fit=crop" alt="Badminton Tournament">
+                            <div class="carousel-overlay">
+                                <h2 class="font-display-lg text-5xl md:text-7xl mb-4 neon-pulse">APEX COMMUNITY</h2>
+                                <p class="text-xl md:text-2xl text-white/90 max-w-2xl">Nơi kết nối đam mê cầu lông</p>
+                                <div class="mt-8 flex gap-4">
+                                    <button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Join Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1400&h=600&fit=crop" alt="Training Camp">
+                            <div class="carousel-overlay">
+                                <h2 class="font-display-lg text-5xl md:text-7xl mb-4">TRAINING CAMPS</h2>
+                                <p class="text-xl md:text-2xl text-white/90 max-w-2xl">Huấn luyện cùng chuyên gia hàng đầu</p>
+                                <div class="mt-8 flex gap-4">
+                                    <button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Register Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1613918431708-1fe89e68b0b8?w=1400&h=600&fit=crop" alt="Community Match">
+                            <div class="carousel-overlay">
+                                <h2 class="font-display-lg text-5xl md:text-7xl mb-4">WEEKLY TOURNAMENTS</h2>
+                                <p class="text-xl md:text-2xl text-white/90 max-w-2xl">Giao lưu, thi đấu và phát triển kỹ năng</p>
+                                <div class="mt-8 flex gap-4">
+                                    <button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">View Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Slide 4 -->
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1400&h=600&fit=crop" alt="Pro Coaching">
+                            <div class="carousel-overlay">
+                                <h2 class="font-display-lg text-5xl md:text-7xl mb-4">PRO COACHING</h2>
+                                <p class="text-xl md:text-2xl text-white/90 max-w-2xl">Nâng tầm kỹ thuật cùng HLV chuyên nghiệp</p>
+                                <div class="mt-8 flex gap-4">
+                                    <button class="bg-primary-fixed text-on-primary-fixed px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Book Session</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="carousel-btn prev" id="prevBtn">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </div>
+                    <div class="carousel-btn next" id="nextBtn">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </div>
+                    
+                    <!-- Dots -->
+                    <div class="carousel-dots" id="carouselDots"></div>
                 </div>
             </div>
         </section>
 
-        <!-- PRODUCTS GRID - FULL SHOP PAGE -->
-        <section class="py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
-            <div class="max-w-container-max mx-auto">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter" id="shopProductsGrid"></div>
-                <div id="noResultsMsg" class="text-center py-16 hidden">
-                    <span class="material-symbols-outlined text-5xl text-white/30">search_off</span>
-                    <p class="mt-2 text-white/50">Không tìm thấy sản phẩm phù hợp</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- BANNER FLASH SALE (glass-card extension) -->
+        <!-- COMMUNITY STATS SECTION (Glass Card Style) -->
         <section class="py-16 px-margin-mobile md:px-margin-desktop">
-            <div class="max-w-container-max mx-auto glass-card rounded-3xl p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-6 border border-[#abd60020]">
-                <div><h3 class="font-headline-lg text-headline-lg text-primary-fixed">⚡ FLASH SALE</h3><p class="text-on-surface-variant">Giảm đến 15% cho thành viên Diamond</p></div>
-                <div class="flex gap-3"><span class="bg-black/50 px-5 py-2 rounded-full font-mono text-2xl font-bold text-primary-fixed">24</span><span class="text-white/70">giờ</span></div>
+            <div class="max-w-container-max mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="glass-card p-8 text-center">
+                        <span class="material-symbols-outlined text-5xl text-primary-fixed">groups</span>
+                        <h3 class="text-3xl font-bold mt-3 text-primary-fixed neon-pulse">12,847+</h3>
+                        <p class="text-white/70 mt-2">Thành viên</p>
+                    </div>
+                    <div class="glass-card p-8 text-center">
+                        <span class="material-symbols-outlined text-5xl text-primary-fixed">sports_tennis</span>
+                        <h3 class="text-3xl font-bold mt-3 text-primary-fixed neon-pulse">328</h3>
+                        <p class="text-white/70 mt-2">Trận đấu/tuần</p>
+                    </div>
+                    <div class="glass-card p-8 text-center">
+                        <span class="material-symbols-outlined text-5xl text-primary-fixed">event</span>
+                        <h3 class="text-3xl font-bold mt-3 text-primary-fixed neon-pulse">45+</h3>
+                        <p class="text-white/70 mt-2">Sự kiện/năm</p>
+                    </div>
+                    <div class="glass-card p-8 text-center">
+                        <span class="material-symbols-outlined text-5xl text-primary-fixed">emoji_events</span>
+                        <h3 class="text-3xl font-bold mt-3 text-primary-fixed neon-pulse">24</h3>
+                        <p class="text-white/70 mt-2">Giải đấu chuyên nghiệp</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED COMMUNITY POSTS (Sample for you to expand) -->
+        <section class="py-16 px-margin-mobile md:px-margin-desktop bg-surface-container-low">
+            <div class="max-w-container-max mx-auto">
+                <div class="text-center mb-12">
+                    <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Community Feed</span>
+                    <h2 class="font-headline-lg text-headline-lg md:text-5xl uppercase">Hoạt động nổi bật</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="postsGrid">
+                    <!-- Sample posts - you can customize here -->
+                    <div class="post-card p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#abd600] to-[#7aa300] flex items-center justify-center text-black font-bold">TL</div>
+                            <div><h4 class="font-bold">Trần Lâm</h4><p class="text-xs text-white/50">2 giờ trước</p></div>
+                        </div>
+                        <p class="text-white/80 mb-4">Tuyệt vời! Vừa nhận được vợt Aero-Tek Pro từ Apex Store. Cảm giác cầm rất êm, lực đập mạnh hơn hẳn 🔥</p>
+                        <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=300&fit=crop" class="rounded-xl w-full h-48 object-cover mb-3">
+                        <div class="flex gap-4 text-white/50">
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">favorite</span> 128</span>
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">comment</span> 24</span>
+                        </div>
+                    </div>
+                    <div class="post-card p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#abd600] to-[#7aa300] flex items-center justify-center text-black font-bold">MN</div>
+                            <div><h4 class="font-bold">Minh Ngọc</h4><p class="text-xs text-white/50">5 giờ trước</p></div>
+                        </div>
+                        <p class="text-white/80 mb-4">Hôm nay tham gia training camp của Apex, được hướng dẫn kỹ thuật smash siêu hay. Cảm ơn đội ngũ HLV!</p>
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" class="rounded-xl w-full h-48 object-cover mb-3">
+                        <div class="flex gap-4 text-white/50">
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">favorite</span> 89</span>
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">comment</span> 15</span>
+                        </div>
+                    </div>
+                    <div class="post-card p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#abd600] to-[#7aa300] flex items-center justify-center text-black font-bold">ĐK</div>
+                            <div><h4 class="font-bold">Đức Khải</h4><p class="text-xs text-white/50">1 ngày trước</p></div>
+                        </div>
+                        <p class="text-white/80 mb-4">Ai muốn tham gia giải đấu cuối tuần này không? Đăng ký ngay tại Apex nhé!</p>
+                        <div class="bg-primary-fixed/10 rounded-xl p-4 border border-primary-fixed/30 text-center">
+                            <span class="text-primary-fixed font-bold">🏆 Giải đấu Apex Cup 2025</span>
+                            <p class="text-sm text-white/70 mt-1">8-9 tháng 2 · Đăng ký đến hết 5/2</p>
+                        </div>
+                        <div class="flex gap-4 text-white/50 mt-3">
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">favorite</span> 234</span>
+                            <span class="flex items-center gap-1 cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-sm">comment</span> 56</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UPCOMING EVENTS (Glass Cards) -->
+        <section class="py-16 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto">
+                <div class="text-center mb-12">
+                    <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Don't Miss</span>
+                    <h2 class="font-headline-lg text-headline-lg md:text-5xl uppercase">Sự kiện sắp tới</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-8 flex items-center gap-6">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-primary-fixed">15</div>
+                            <div class="text-sm">Tháng 2</div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Apex Community Tournament</h3>
+                            <p class="text-white/60 text-sm mt-1">Nhà thi đấu Quận 7 · 08:00 - 17:00</p>
+                            <button class="mt-3 text-primary-fixed text-sm font-semibold hover:underline">Đăng ký →</button>
+                        </div>
+                    </div>
+                    <div class="glass-card p-8 flex items-center gap-6">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-primary-fixed">22</div>
+                            <div class="text-sm">Tháng 2</div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Pro Training Workshop</h3>
+                            <p class="text-white/60 text-sm mt-1">Apex Training Center · 14:00 - 18:00</p>
+                            <button class="mt-3 text-primary-fixed text-sm font-semibold hover:underline">Đăng ký →</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -209,7 +438,7 @@
         <div class="flex gap-8"><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Support</a><a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Warranty</a></div>
     </footer>
 
-    <!-- Cart Drawer + Overlay -->
+    <!-- Cart Drawer -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-drawer" id="cartDrawer">
         <div class="flex justify-between items-center pb-4 border-b border-white/10">
@@ -230,7 +459,7 @@
         <div class="modal-glass rounded-3xl w-[90%] max-w-lg p-6 border border-[#abd600]/30 shadow-2xl">
             <div class="flex justify-between items-center border-b border-white/10 pb-3"><h3 class="text-xl font-bold"><span class="material-symbols-outlined text-[#abd600]">account_circle</span> Hồ sơ thành viên</h3><span id="closeProfileBtn" class="material-symbols-outlined cursor-pointer hover:text-[#abd600]">close</span></div>
             <div id="profileContent" class="py-5 space-y-4"></div>
-            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition" >Đăng xuất</button>
+            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition">Đăng xuất</button>
         </div>
     </div>
 
@@ -263,23 +492,80 @@
     <div id="toastMsg" class="toast-msg">✨ Thông báo</div>
 
     <script>
+        // ===== CAROUSEL AUTO-PLAY LOGIC =====
         (function() {
+            const track = document.getElementById('carouselTrack');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            let currentIndex = 0;
+            let autoPlayInterval;
+            const totalSlides = slides.length;
+            
+            // Create dots
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('carousel-dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+            
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            function updateDots() {
+                dots.forEach((dot, idx) => {
+                    if (idx === currentIndex) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+            }
+            
+            function goToSlide(index) {
+                if (index < 0) index = totalSlides - 1;
+                if (index >= totalSlides) index = 0;
+                currentIndex = index;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                updateDots();
+                resetAutoPlay();
+            }
+            
+            function nextSlide() { goToSlide(currentIndex + 1); }
+            function prevSlide() { goToSlide(currentIndex - 1); }
+            
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(() => {
+                    nextSlide();
+                }, 5000);
+            }
+            
+            function resetAutoPlay() {
+                clearInterval(autoPlayInterval);
+                startAutoPlay();
+            }
+            
+            prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
+            nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
+            
+            // Pause on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+            carouselContainer.addEventListener('mouseleave', () => startAutoPlay());
+            
+            startAutoPlay();
+            
+            // Cart and Auth Logic (same as before)
             let currentUser = null;
             let isLoggedIn = false;
             let cart = [];
-
-            // Expanded product list
-            const allProducts = [
-                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB07J8wB7znBWKx-QPKBh615R5pr9kZv28QDfcGpAb_HHTajx2K1gdyCL5bgDR8k17N_3r4n2yuWB7SH2Ce4uKCuraGs2hL2qqf_jXmbwV_4-epjjPMtjowVll8xyzsVt1FdiAmqQzGKboQD3yMdbZlEwsGPvGD-XLmOXIGP0N0cpA2bpIZDfGWODZH6iIErd74DAh7eTAx71znIfqmww3T58nLFbGinRYoL2_ohR7irH05xO_0P11DuMOz7t3s2tZBw7l0Kp83J4w", category: "rackets" },
-                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAXIaH8Ht_-vP2qByitDWqFdnVmW3B1Adf_9vjDY4uo44yd1udtTFe-VWCSPZwDibEl-NzSIpdAOnwa7PhoQNS2ziULS7MSz7JCn3yMw4TeQtgwKdEvIx5RwRX9iqWOXfIC50ipXLub8fN5DixkIkijbA9s7e3k0YbXnYCeAZFF5tFtmmUJ4iPQ5iPKPxWTlc7DHlw7zPb1AdT_ScLNIs8g0tEL5qdI1BZMGopN17YHS2Zk-wcmQdH_9AosnV7lZQ0lCMG-eH8TMoY", category: "shoes" },
-                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB7c74ZgDEPg8MaTnB7AMffzRDpEyczDPJgtu01d4Zq6dGuOzUf0UFPxfW5PgVe_a0Bpx9V6otveElsg6iYlTblwcJidaMqChx7sL7adhz98Sl35PX54zYmQVxgq5o0xR99hXs1HHT5xhGBIQQx4bI65KLH8I7f33xn2i4MfQF7kIOK8owH3d6x1uCXugumJatjyaJw5JfjWHs-Uu6W8tF97clupqbv8X8M2mhRupmA6WMvT65JlQSpXFwl4LnA3ZImUDaOVKPYQO4", category: "shuttles" },
-                { id: 4, name: "Carbon X-Treme Racket", price: 5200000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "rackets" },
-                { id: 5, name: "Swift Claw 3.0 Shoes", price: 3100000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop", category: "shoes" },
-                { id: 6, name: "Tournament Grade Shuttles (12pcs)", price: 690000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&h=400&fit=crop", category: "shuttles" },
-                { id: 7, name: "Apex Pro Backpack", price: 1250000, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop", category: "accessories" },
-                { id: 8, name: "Elite Grip Towel", price: 290000, image: "https://images.unsplash.com/photo-1617206658066-8c191f4e2fa8?w=400&h=400&fit=crop", category: "accessories" }
+            
+            const shopProducts = [
+                { id: 1, name: "Aero-Tek Pro Racket", price: 4500000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=100&h=100&fit=crop" },
+                { id: 2, name: "Ignite Performance Shoes", price: 2800000, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop" },
+                { id: 3, name: "Volt Gold Shuttlecocks", price: 450000, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=100&h=100&fit=crop" }
             ];
-
+            
             function getRankFromUser(user) {
                 const spent = user?.totalSpent || 0;
                 if (spent >= 30000000) return { name: "Diamond", discount: 15, icon: "diamond" };
@@ -287,7 +573,7 @@
                 if (spent >= 5000000) return { name: "Silver", discount: 5, icon: "stars" };
                 return { name: "Bronze", discount: 2, icon: "emoji_events" };
             }
-
+            
             function saveUsers(users) { localStorage.setItem('apex_users', JSON.stringify(users)); }
             function loadUsers() { return JSON.parse(localStorage.getItem('apex_users') || '[]'); }
             function saveCurrentUser() {
@@ -301,16 +587,16 @@
             function login(email, password) { const users = loadUsers(); const user = users.find(u => u.email === email && u.password === password); if (user) { currentUser = { ...user, totalSpent: user.totalSpent || 0, totalOrders: user.totalOrders || 0 }; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); updateCartUI(); showToast(`Chào ${user.fullName}!`); return true; } return false; }
             function register(fullName, email, username, password) { let users = loadUsers(); if (users.find(u => u.email === email)) { showToast("Email đã tồn tại!", true); return false; } const newUser = { id: Date.now(), fullName, email, username, password, totalSpent: 0, totalOrders: 0 }; users.push(newUser); saveUsers(users); currentUser = newUser; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Đăng ký thành công!`); return true; }
             function logout() { isLoggedIn = false; currentUser = null; saveCurrentUser(); renderNavbarAvatar(); cart = []; saveCart(); updateCartUI(); document.getElementById('profileModal').classList.add('hidden'); }
-
+            
             function saveCart() { localStorage.setItem('apex_cart', JSON.stringify(cart)); }
             function loadCart() { cart = JSON.parse(localStorage.getItem('apex_cart') || '[]'); updateCartUI(); }
             function addToCart(product) { if (!isLoggedIn) { showToast("Vui lòng đăng nhập!", true); openAuthModal(); return; } const existing = cart.find(i => i.id === product.id); if (existing) existing.quantity++; else cart.push({...product, quantity: 1}); saveCart(); updateCartUI(); showToast(`➕ ${product.name} vào giỏ`); }
             function updateCartUI() {
                 document.getElementById('cartCountBadge').innerText = cart.reduce((s,i) => s + i.quantity, 0);
                 const container = document.getElementById('cartItemsList');
-                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">🛒 Giỏ hàng trống</div>'; updateCartTotals(); saveCart(); return; }
+                if (cart.length === 0) { container.innerHTML = '<div class="text-center text-white/50 py-8">🛒 Giỏ hàng trống</div>'; updateCartTotals(); return; }
                 container.innerHTML = cart.map((item, idx) => `<div class="flex gap-3 bg-black/30 p-2 rounded-xl"><img src="${item.image}" class="w-16 h-16 rounded-lg object-cover"><div class="flex-1"><div class="font-bold">${item.name}</div><div class="text-[#abd600]">${item.price.toLocaleString()}₫</div><div class="flex items-center gap-2 mt-1"><button class="minus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">-</button><span>${item.quantity}</span><button class="plus-item text-white bg-white/10 px-2 rounded" data-idx="${idx}">+</button><button class="remove-item text-red-400 text-sm ml-2" data-idx="${idx}">Xóa</button></div></div></div>`).join('');
-                attachCartEvents(); updateCartTotals(); saveCart();
+                attachCartEvents(); updateCartTotals();
             }
             function attachCartEvents() {
                 document.querySelectorAll('.minus-item').forEach(b => b.onclick = () => { let i = b.dataset.idx; if (cart[i].quantity > 1) cart[i].quantity--; else cart.splice(i,1); updateCartUI(); });
@@ -326,41 +612,7 @@
                 document.getElementById('cartTotalFinal').innerText = (subtotal - discountAmount).toLocaleString() + '₫';
                 document.getElementById('cartDiscountLine').style.display = discountPercent > 0 ? 'flex' : 'none';
             }
-            
-            // FIXED: Complete purchase function - clears cart properly
-            function completePurchase(totalSpentNow) { 
-                if (!isLoggedIn) { 
-                    showToast("Đăng nhập để thanh toán", true); 
-                    openAuthModal(); 
-                    return false; 
-                } 
-                
-                if (cart.length === 0) {
-                    showToast("Giỏ hàng trống!", true);
-                    return false;
-                }
-                
-                // Update user spending
-                currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; 
-                currentUser.totalOrders = (currentUser.totalOrders || 0) + 1; 
-                updateUserInStorage(currentUser); 
-                
-                // Clear cart
-                cart = []; 
-                saveCart(); 
-                updateCartUI(); // Refresh cart display
-                
-                // Close cart drawer
-                closeCartDrawer(); 
-                
-                // Celebration effects
-                canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); 
-                showToast(`✅ Thanh toán thành công! Cảm ơn bạn đã mua hàng`); 
-                
-                // Update user rank display
-                renderNavbarAvatar(); 
-                return true; 
-            }
+            function completePurchase(totalSpentNow) { if (!isLoggedIn) { showToast("Đăng nhập để thanh toán", true); openAuthModal(); return false; } if (cart.length === 0) { showToast("Giỏ hàng trống!", true); return false; } currentUser.totalSpent = (currentUser.totalSpent || 0) + totalSpentNow; currentUser.totalOrders = (currentUser.totalOrders || 0) + 1; updateUserInStorage(currentUser); cart = []; saveCart(); updateCartUI(); closeCartDrawer(); canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); showToast(`✅ Thanh toán thành công!`); renderNavbarAvatar(); return true; }
             
             function renderNavbarAvatar() {
                 const container = document.getElementById('userNavSection');
@@ -373,38 +625,12 @@
             function openCartDrawer() { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); }
             function closeCartDrawer() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); }
             function showToast(msg, isErr = false) { const toast = document.getElementById('toastMsg'); toast.innerText = isErr ? `⚠️ ${msg}` : `✨ ${msg}`; toast.style.background = isErr ? '#8b2c2c' : '#1e2a1a'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); }
-
-            // Render shop grid with filter & search
-            let currentFilter = "all";
-            function renderShopProducts(filter = "all", searchTerm = "") {
-                const container = document.getElementById('shopProductsGrid');
-                let filtered = allProducts.filter(p => filter === "all" ? true : p.category === filter);
-                if (searchTerm.trim() !== "") filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
-                if (filtered.length === 0) { document.getElementById('noResultsMsg').classList.remove('hidden'); container.innerHTML = ""; return; }
-                document.getElementById('noResultsMsg').classList.add('hidden');
-                container.innerHTML = filtered.map(p => `<div class="product-card p-4 group fade-in"><div class="relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4"><img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/1a1c1c/abd600?text=Badminton'"/><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><button class="add-to-cart-btn bg-white text-black p-3 hover:bg-primary-fixed rounded-full" data-id="${p.id}"><span class="material-symbols-outlined">shopping_bag</span></button></div></div><div class="flex justify-between"><h3 class="font-headline-md text-headline-md">${p.name}</h3><p class="text-primary-fixed font-bold">${p.price.toLocaleString()} VND</p></div></div>`).join('');
-                document.querySelectorAll('.add-to-cart-btn').forEach(b => b.onclick = () => { const prod = allProducts.find(p => p.id == b.dataset.id); if(prod) addToCart(prod); });
-            }
-
-            // Filter event listeners
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]'));
-                    chip.classList.add('active', 'border-[#abd600]', 'bg-[#abd60020]', 'text-[#abd600]');
-                    currentFilter = chip.dataset.filter;
-                    const searchVal = document.getElementById('searchInput')?.value || "";
-                    renderShopProducts(currentFilter, searchVal);
-                });
-            });
-            document.getElementById('searchInput')?.addEventListener('input', (e) => { renderShopProducts(currentFilter, e.target.value); });
             
             // Initialize
-            renderShopProducts("all", "");
             const saved = JSON.parse(localStorage.getItem('apex_currentUser'));
             if (saved && localStorage.getItem('apex_loggedIn') === 'true') { currentUser = saved; isLoggedIn = true; }
             loadCart(); renderNavbarAvatar(); updateCartUI();
-
-            // Event bindings
+            
             document.getElementById('cartIcon').onclick = openCartDrawer;
             document.getElementById('closeCartBtn').onclick = closeCartDrawer;
             document.getElementById('cartOverlay').onclick = closeCartDrawer;
