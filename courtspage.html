@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html class="dark" lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport" />
+    <title>Apex Badminton | Courts & Groups</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 8px rgba(171, 214, 0, 0.8)); }
+            50% { opacity: 0.8; filter: drop-shadow(0 0 15px rgba(171, 214, 0, 1)); }
+        }
+        .neon-pulse { animation: pulse-glow 2s infinite ease-in-out; }
+        .glass-card {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card:hover { border-color: rgba(171, 214, 0, 0.3); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0c0f0f; }
+        ::-webkit-scrollbar-thumb { background: #333535; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #abd600; }
+ 
+        .user-avatar-circle {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #abd600, #7aa300);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.3rem; color: #1a2a00;
+            text-transform: uppercase; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .user-avatar-circle:hover { transform: scale(1.05); box-shadow: 0 0 12px #abd600; }
+        .rank-badge {
+            padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(171, 214, 0, 0.15); border: 1px solid rgba(171, 214, 0, 0.5); color: #abd600;
+        }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+ 
+        .court-card {
+            background: #1e2020;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.25s;
+            overflow: hidden;
+        }
+        .court-card:hover { transform: translateY(-6px); border-color: #abd60040; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5); }
+ 
+        .group-card {
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .group-card:hover { border-color: rgba(171, 214, 0, 0.4); box-shadow: 0 0 30px rgba(171,214,0,0.08); }
+ 
+        .status-open {
+            background: rgba(171, 214, 0, 0.15);
+            border: 1px solid rgba(171, 214, 0, 0.4);
+            color: #abd600;
+        }
+        .status-full {
+            background: rgba(255, 100, 100, 0.12);
+            border: 1px solid rgba(255, 100, 100, 0.35);
+            color: #ff8080;
+        }
+        .status-limited {
+            background: rgba(255, 180, 0, 0.12);
+            border: 1px solid rgba(255, 180, 0, 0.35);
+            color: #ffb400;
+        }
+        .level-dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+        }
+        .tab-active {
+            background: #abd600;
+            color: #161e00;
+            font-weight: 700;
+        }
+        .tab-inactive {
+            color: rgba(255,255,255,0.5);
+        }
+        .tab-inactive:hover { color: #abd600; }
+ 
+        .map-placeholder {
+            background: linear-gradient(135deg, #1a1c1c 0%, #1e2020 50%, #161816 100%);
+            border: 1px solid rgba(171,214,0,0.15);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 40px,
+                rgba(171,214,0,0.03) 40px,
+                rgba(171,214,0,0.03) 41px
+            ), repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 40px,
+                rgba(171,214,0,0.03) 40px,
+                rgba(171,214,0,0.03) 41px
+            );
+        }
+        .toast-msg {
+            position: fixed; bottom: 24px; right: 24px; background: #1e2a1a; border-left: 4px solid #abd600;
+            padding: 12px 24px; border-radius: 60px; color: white; z-index: 1200;
+            transform: translateX(450px); transition: transform 0.25s; font-weight: 500;
+        }
+        .toast-msg.show { transform: translateX(0); }
+ 
+        .modal-glass {
+            background: rgba(20, 20, 25, 0.98); backdrop-filter: blur(12px); border: 1px solid #abd60030;
+        }
+        .input-dark {
+            background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(171, 214, 0, 0.2);
+            transition: all 0.3s ease; color: #e2e2e2;
+        }
+        .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
+        .input-dark::placeholder { color: rgba(255,255,255,0.3); }
+ 
+        .join-btn {
+            background: transparent;
+            border: 1px solid rgba(171, 214, 0, 0.4);
+            color: #abd600;
+            transition: 0.2s;
+        }
+        .join-btn:hover {
+            background: #abd600;
+            color: #161e00;
+            box-shadow: 0 0 20px rgba(171,214,0,0.3);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-low": "#1a1c1c",
+                        "secondary": "#c8c6c5",
+                        "on-primary": "#283500",
+                        "surface-tint": "#abd600",
+                        "surface-container-highest": "#333535",
+                        "on-background": "#e2e2e2",
+                        "outline": "#8e9379",
+                        "primary-fixed": "#c3f400",
+                        "primary-container": "#c3f400",
+                        "primary-fixed-dim": "#abd600",
+                        "on-primary-fixed": "#161e00",
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#c4c9ac",
+                        "surface": "#121414",
+                        "surface-container-high": "#282a2b",
+                        "surface-container": "#1e2020",
+                        "surface-container-lowest": "#0c0f0f",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "background": "#121414",
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                    spacing: {
+                        "margin-mobile": "20px", "margin-desktop": "64px",
+                        "gutter": "24px", "container-max": "1280px", "unit": "4px"
+                    },
+                    fontFamily: {
+                        "headline-md": ["Archivo Narrow"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Archivo Narrow"],
+                        "display-lg": ["Archivo Narrow"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["72px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary overflow-x-hidden">
+ 
+    <!-- TopNavBar -->
+    <header class="bg-surface/80 backdrop-blur-md dark:bg-surface-container-lowest/80 font-headline-md text-headline-md border-b border-white/10 shadow-[0_0_20px_rgba(171,214,0,0.15)] flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 z-50 sticky top-0">
+        <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary dark:text-primary-fixed">
+            <a href="index.html">Apex Badminton Store</a>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="index.html">Home</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="shoppage.html">Shop</a>
+            <a class="text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 drop-shadow-[0_0_8px_rgba(171,214,0,0.8)] font-headline-md text-headline-md transition-all duration-150" href="courts.html">Courts</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="communitypage.html">Community</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="eventspage.html">Events</a>
+            <a class="text-on-surface-variant dark:text-secondary-fixed-dim hover:dark:text-primary-fixed transition-colors duration-300 font-headline-md text-headline-md" href="supportpage.html">Support</a>
+            <input placeholder="Tìm kiếm..." class="ml-4 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-primary transition" />
+        </nav>
+        <div class="flex items-center gap-6">
+            <div id="userNavSection" class="flex items-center gap-3"></div>
+        </div>
+    </header>
+ 
+    <main>
+ 
+        <!-- Hero Section -->
+        <section class="relative h-[70vh] w-full flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img
+                    alt="Badminton court aerial view"
+                    class="w-full h-full object-cover brightness-40 opacity-70"
+                    src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1600&auto=format&fit=crop&q=80"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30"></div>
+            </div>
+            <div class="relative z-10 text-center px-margin-mobile max-w-4xl mx-auto">
+                <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.25em] uppercase mb-6 block">Apex Badminton Complex</span>
+                <h1 class="font-display-lg text-[56px] md:text-[80px] text-primary mb-4 tracking-tighter leading-none uppercase">
+                    <span class="block">SÂN ĐẤU</span>
+                    <span class="block text-primary-fixed drop-shadow-[0_0_20px_rgba(171,214,0,0.6)] neon-pulse">ĐẲNG CẤP</span>
+                </h1>
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+                    Hệ thống 12 sân cầu lông tiêu chuẩn quốc tế — nơi các nhóm vãng lai và thành viên đặc biệt cùng chinh phục giới hạn.
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                    <button onclick="scrollToCourts()" class="bg-primary-fixed text-on-primary px-10 py-4 font-headline-md font-bold uppercase tracking-tight hover:brightness-110 transition-all duration-300 shadow-[0_0_30px_rgba(171,214,0,0.3)]">Đặt Sân Ngay</button>
+                    <button onclick="scrollToGroups()" class="border border-white/20 text-white px-10 py-4 font-headline-md font-bold uppercase tracking-tight hover:bg-white/5 transition-all duration-300">Xem Nhóm Vãng Lai</button>
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Stats Bar -->
+        <section class="py-8 px-margin-mobile md:px-margin-desktop bg-surface-container-low border-y border-white/5">
+            <div class="max-w-container-max mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="font-display-lg text-[40px] text-primary-fixed font-bold leading-none">12</div>
+                    <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Sân Thi Đấu</div>
+                </div>
+                <div>
+                    <div class="font-display-lg text-[40px] text-primary-fixed font-bold leading-none">24/7</div>
+                    <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Giờ Hoạt Động</div>
+                </div>
+                <div>
+                    <div class="font-display-lg text-[40px] text-primary-fixed font-bold leading-none">8</div>
+                    <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Nhóm Vãng Lai</div>
+                </div>
+                <div>
+                    <div class="font-display-lg text-[40px] text-primary-fixed font-bold leading-none">500+</div>
+                    <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Thành Viên</div>
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Courts Section -->
+        <section id="courts-section" class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+            <div class="max-w-container-max mx-auto">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-4">
+                    <div>
+                        <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-3 block">Hệ Thống Sân</span>
+                        <h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase">Sân Thi Đấu</h2>
+                    </div>
+                    <!-- Filter Tabs -->
+                    <div class="flex gap-2 p-1 glass-card rounded-full w-fit">
+                        <button onclick="filterCourts('all')" id="tab-all" class="tab-active px-5 py-2 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all">Tất Cả</button>
+                        <button onclick="filterCourts('available')" id="tab-available" class="tab-inactive px-5 py-2 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all">Còn Trống</button>
+                        <button onclick="filterCourts('premium')" id="tab-premium" class="tab-inactive px-5 py-2 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all">Premium</button>
+                    </div>
+                </div>
+ 
+                <!-- Courts Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="courtsGrid">
+ 
+                    <!-- Court 1 -->
+                    <div class="court-card fade-in" data-type="available">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1624807831004-4d8bc5628d73?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân A1" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-open px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">● Còn Trống</span>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân A1</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Tiêu Chuẩn A1</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">80.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Sân thi đấu tiêu chuẩn BWF với hệ thống đèn LED cao cấp, sàn gỗ Yonex.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">light_mode</span> LED Pro</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">air</span> Điều hòa</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">videocam</span> Camera</span>
+                            </div>
+                            <button onclick="showBooking('Sân A1')" class="join-btn w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Đặt Sân</button>
+                        </div>
+                    </div>
+ 
+                    <!-- Court 2 -->
+                    <div class="court-card fade-in" data-type="premium">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân Premium B1" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-open px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">● Còn Trống</span>
+                            </div>
+                            <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                                <span class="bg-primary-fixed text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">⭐ Premium</span>
+                                <span class="bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân B1</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Premium B1</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">150.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Sân VIP với khán đài mini, hệ thống âm thanh và ghế nghỉ riêng biệt.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">star</span> VIP Lounge</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">music_note</span> Âm Thanh</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">sports</span> Trọng Tài</span>
+                            </div>
+                            <button onclick="showBooking('Sân Premium B1')" class="join-btn w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Đặt Sân</button>
+                        </div>
+                    </div>
+ 
+                    <!-- Court 3 -->
+                    <div class="court-card fade-in" data-type="available">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân C2" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-limited px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">◐ Còn 2 Khung</span>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân C2</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Tiêu Chuẩn C2</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">80.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Sân thi đấu thông thoáng với cửa sổ lớn, phù hợp buổi sáng sớm và chiều tối.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">wb_sunny</span> Ánh Sáng Tự Nhiên</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">air</span> Điều hòa</span>
+                            </div>
+                            <button onclick="showBooking('Sân C2')" class="join-btn w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Đặt Sân</button>
+                        </div>
+                    </div>
+ 
+                    <!-- Court 4 -->
+                    <div class="court-card fade-in" data-type="premium">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1599058917760-5a4e08a0c6c9?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân Premium D1" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-full px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">✕ Hết Chỗ</span>
+                            </div>
+                            <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                                <span class="bg-primary-fixed text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">⭐ Premium</span>
+                                <span class="bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân D1</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Premium D1</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">150.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Sân thi đấu chuyên nghiệp với hệ thống camera phân tích kỹ thuật chuẩn Olympic.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">analytics</span> Phân Tích AI</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">videocam</span> Multi-Cam</span>
+                            </div>
+                            <button disabled class="w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest bg-white/5 text-white/30 cursor-not-allowed border border-white/10">Đã Hết Chỗ</button>
+                        </div>
+                    </div>
+ 
+                    <!-- Court 5 -->
+                    <div class="court-card fade-in" data-type="available">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân E3" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-open px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">● Còn Trống</span>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân E3</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Tiêu Chuẩn E3</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">80.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Sân mới cải tạo với sàn nhựa PVC cao su chống trơn trượt, lý tưởng cho người mới.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">verified</span> Mới Cải Tạo</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">air</span> Điều hòa</span>
+                            </div>
+                            <button onclick="showBooking('Sân E3')" class="join-btn w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Đặt Sân</button>
+                        </div>
+                    </div>
+ 
+                    <!-- Court 6 -->
+                    <div class="court-card fade-in" data-type="available">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80" class="w-full h-full object-cover brightness-75 transition-transform duration-700 hover:scale-110" alt="Sân F2" />
+                            <div class="absolute top-4 left-4">
+                                <span class="status-limited px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">◐ Còn 1 Khung</span>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full">
+                                <span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-widest">Sân F2</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline-md text-headline-md uppercase">Sân Tiêu Chuẩn F2</h3>
+                                <div class="text-right">
+                                    <div class="text-primary-fixed font-bold text-lg">80.000₫</div>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">/giờ</div>
+                                </div>
+                            </div>
+                            <p class="text-on-surface-variant text-sm mb-4">Vị trí thuận lợi, gần khu thay đồ và căng tin. Phù hợp các nhóm muốn nghỉ ngơi giữa hiệp.</p>
+                            <div class="flex flex-wrap gap-2 mb-5">
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">restaurant</span> Gần Căng Tin</span>
+                                <span class="glass-card px-3 py-1 rounded-full font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary-fixed">checkroom</span> Phòng Thay Đồ</span>
+                            </div>
+                            <button onclick="showBooking('Sân F2')" class="join-btn w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Đặt Sân</button>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Drop-In Groups Section -->
+        <section id="groups-section" class="py-24 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+                    <div>
+                        <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-3 block">Cộng Đồng Thi Đấu</span>
+                        <h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase">Nhóm Vãng Lai</h2>
+                        <p class="text-on-surface-variant mt-3 max-w-lg">Không cần đội cố định. Tham gia nhóm vãng lai phù hợp trình độ của bạn — ghép đôi, thi đấu, kết bạn.</p>
+                    </div>
+                    <button onclick="showCreateGroup()" class="border border-primary-fixed/40 text-primary-fixed px-8 py-3 font-headline-md text-sm font-bold uppercase tracking-widest hover:bg-primary-fixed hover:text-on-primary transition-all duration-300 w-fit h-fit flex items-center gap-2">
+                        <span class="material-symbols-outlined">add</span> Tạo Nhóm Mới
+                    </button>
+                </div>
+ 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="groupsGrid">
+ 
+                    <!-- Group 1 -->
+                    <div class="group-card p-6 fade-in">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center font-bold text-black text-lg">ĐB</div>
+                                <div>
+                                    <h3 class="font-headline-md text-headline-md">Dawn Breakers</h3>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">Nhóm Sáng Sớm</div>
+                                </div>
+                            </div>
+                            <span class="status-open px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">Mở</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Lịch Tập</div>
+                                <div class="text-sm font-medium">T2, T4, T6 · 6:00–8:00</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Trình Độ</div>
+                                <div class="flex items-center gap-2 text-sm font-medium">
+                                    <span class="level-dot bg-green-400"></span> Tất Cả Trình Độ
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Thành Viên</div>
+                                <div class="text-sm font-medium text-primary-fixed">14 / 20 người</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Phí / Buổi</div>
+                                <div class="text-sm font-medium">30.000₫</div>
+                            </div>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mb-5">Nhóm chào đón mọi trình độ. Không khí thân thiện, thường có đánh đôi thi đấu nội bộ cuối buổi.</p>
+                        <div class="flex gap-3">
+                            <button onclick="joinGroup('Dawn Breakers')" class="join-btn flex-1 py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Tham Gia</button>
+                            <button class="glass-card px-4 py-3 rounded-full hover:border-white/20 transition-colors">
+                                <span class="material-symbols-outlined text-on-surface-variant">info</span>
+                            </button>
+                        </div>
+                    </div>
+ 
+                    <!-- Group 2 -->
+                    <div class="group-card p-6 fade-in">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-800 flex items-center justify-center font-bold text-white text-lg">NX</div>
+                                <div>
+                                    <h3 class="font-headline-md text-headline-md">Night Xtremes</h3>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">Nhóm Đêm Khuya</div>
+                                </div>
+                            </div>
+                            <span class="status-limited px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">Sắp Đầy</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Lịch Tập</div>
+                                <div class="text-sm font-medium">T3, T5, CN · 21:00–23:00</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Trình Độ</div>
+                                <div class="flex items-center gap-2 text-sm font-medium">
+                                    <span class="level-dot bg-orange-400"></span> Trung – Cao
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Thành Viên</div>
+                                <div class="text-sm font-medium text-yellow-400">18 / 20 người</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Phí / Buổi</div>
+                                <div class="text-sm font-medium">40.000₫</div>
+                            </div>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mb-5">Nhóm thi đấu nghiêm túc sau giờ làm. Yêu cầu trình độ từ trung bình trở lên. Thường tổ chức giải nội bộ hàng tháng.</p>
+                        <div class="flex gap-3">
+                            <button onclick="joinGroup('Night Xtremes')" class="join-btn flex-1 py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Tham Gia</button>
+                            <button class="glass-card px-4 py-3 rounded-full hover:border-white/20 transition-colors">
+                                <span class="material-symbols-outlined text-on-surface-variant">info</span>
+                            </button>
+                        </div>
+                    </div>
+ 
+                    <!-- Group 3 -->
+                    <div class="group-card p-6 fade-in">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-900 flex items-center justify-center font-bold text-white text-lg">WE</div>
+                                <div>
+                                    <h3 class="font-headline-md text-headline-md">Weekend Warriors</h3>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">Nhóm Cuối Tuần</div>
+                                </div>
+                            </div>
+                            <span class="status-open px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">Mở</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Lịch Tập</div>
+                                <div class="text-sm font-medium">T7, CN · 14:00–17:00</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Trình Độ</div>
+                                <div class="flex items-center gap-2 text-sm font-medium">
+                                    <span class="level-dot bg-green-400"></span> Mọi Trình Độ
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Thành Viên</div>
+                                <div class="text-sm font-medium text-primary-fixed">9 / 24 người</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Phí / Buổi</div>
+                                <div class="text-sm font-medium">35.000₫</div>
+                            </div>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mb-5">Nhóm vui vẻ, thoải mái vào cuối tuần. Rất phù hợp cho gia đình hoặc bạn bè muốn chơi giải trí.</p>
+                        <div class="flex gap-3">
+                            <button onclick="joinGroup('Weekend Warriors')" class="join-btn flex-1 py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest">Tham Gia</button>
+                            <button class="glass-card px-4 py-3 rounded-full hover:border-white/20 transition-colors">
+                                <span class="material-symbols-outlined text-on-surface-variant">info</span>
+                            </button>
+                        </div>
+                    </div>
+ 
+                    <!-- Group 4 -->
+                    <div class="group-card p-6 fade-in">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-red-900 flex items-center justify-center font-bold text-white text-lg">EL</div>
+                                <div>
+                                    <h3 class="font-headline-md text-headline-md">Elite Squadron</h3>
+                                    <div class="font-label-sm text-label-sm text-on-surface-variant">Nhóm Đặc Biệt</div>
+                                </div>
+                            </div>
+                            <span class="status-full px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-widest">Đầy</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Lịch Tập</div>
+                                <div class="text-sm font-medium">Hàng ngày · 7:00–9:00</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Trình Độ</div>
+                                <div class="flex items-center gap-2 text-sm font-medium">
+                                    <span class="level-dot bg-red-400"></span> Chuyên Nghiệp
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Thành Viên</div>
+                                <div class="text-sm font-medium text-red-400">12 / 12 người</div>
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-xl">
+                                <div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Phí / Buổi</div>
+                                <div class="text-sm font-medium">60.000₫</div>
+                            </div>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mb-5">Nhóm vận động viên cấp cao, thi đấu giải tỉnh và quốc gia. Cần được chọn lựa qua vòng thử trình độ.</p>
+                        <div class="flex gap-3">
+                            <button onclick="joinWaitlist('Elite Squadron')" class="w-full py-3 rounded-full font-headline-md text-sm font-bold uppercase tracking-widest bg-white/5 text-white/50 border border-white/10 hover:bg-white/10 hover:text-white transition-all">Đăng Ký Chờ</button>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Facilities Highlights -->
+        <section class="py-24 px-margin-mobile md:px-margin-desktop bg-surface-container-lowest">
+            <div class="max-w-container-max mx-auto">
+                <div class="text-center mb-16">
+                    <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-3 block">Tiện Ích</span>
+                    <h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase">Vì Sao Chọn Apex Courts</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">bolt</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Đèn LED Pro 1000 Lux</h3>
+                        <p class="text-on-surface-variant">Hệ thống chiếu sáng đồng đều chuẩn thi đấu quốc tế, không chói, không tạo bóng khuất. Phù hợp ghi hình chất lượng cao.</p>
+                    </div>
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">ac_unit</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Điều Hòa Toàn Bộ Khu</h3>
+                        <p class="text-on-surface-variant">Nhiệt độ duy trì ổn định 26°C, độ ẩm kiểm soát tối ưu. Thi đấu thoải mái bất kể thời tiết bên ngoài.</p>
+                    </div>
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">analytics</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Phân Tích Kỹ Thuật AI</h3>
+                        <p class="text-on-surface-variant">Camera AI theo dõi chuyển động, phân tích kỹ thuật đánh, tốc độ cầu và số liệu thi đấu. Dành cho sân Premium.</p>
+                    </div>
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">checkroom</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Phòng Thay Đồ VIP</h3>
+                        <p class="text-on-surface-variant">Tủ khóa điện tử cá nhân, vòi hoa sen nước nóng 24/7, khu vực nghỉ ngơi riêng cho thành viên đặc biệt.</p>
+                    </div>
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">restaurant</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Căng Tin & Energy Bar</h3>
+                        <p class="text-on-surface-variant">Đồ uống thể thao, bữa nhẹ dinh dưỡng và thực đơn phục hồi sau tập. Mở cửa từ 5:30 sáng đến nửa đêm.</p>
+                    </div>
+                    <div class="glass-card p-10 flex flex-col gap-4 transition-all duration-300">
+                        <span class="material-symbols-outlined text-primary-fixed text-4xl">local_parking</span>
+                        <h3 class="font-headline-md text-headline-md uppercase">Bãi Đỗ Xe Miễn Phí</h3>
+                        <p class="text-on-surface-variant">Bãi xe rộng 200 chỗ có mái che, camera an ninh 24/7. Miễn phí cho thành viên, phí ưu đãi cho vãng lai.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+        <!-- Map / Location Section -->
+        <section class="py-24 px-margin-mobile md:px-margin-desktop">
+            <div class="max-w-container-max mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="font-label-sm text-label-sm text-primary-fixed tracking-[0.2em] uppercase mb-4 block">Vị Trí</span>
+                        <h2 class="font-headline-lg text-headline-lg md:text-[48px] uppercase mb-6">Tìm Chúng Tôi</h2>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-primary-fixed mt-1">location_on</span>
+                                <div>
+                                    <div class="font-bold mb-1">Địa Chỉ</div>
+                                    <div class="text-on-surface-variant">123 Đường Lê Lợi, Phường Bến Thành, Quận 1, TP.HCM</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-primary-fixed mt-1">schedule</span>
+                                <div>
+                                    <div class="font-bold mb-1">Giờ Hoạt Động</div>
+                                    <div class="text-on-surface-variant">Thứ 2 – Chủ Nhật: 5:30 – 23:30</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-primary-fixed mt-1">call</span>
+                                <div>
+                                    <div class="font-bold mb-1">Hotline</div>
+                                    <div class="text-on-surface-variant">0909 123 456</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="showToast('Đang mở Google Maps...')" class="bg-primary-fixed text-on-primary px-8 py-4 font-headline-md font-bold uppercase tracking-tight hover:brightness-110 transition-all shadow-[0_0_20px_rgba(171,214,0,0.2)] flex items-center gap-2">
+                            <span class="material-symbols-outlined">map</span> Chỉ Đường
+                        </button>
+                    </div>
+                    <div class="map-placeholder h-80 flex items-center justify-center">
+                        <div class="text-center relative z-10">
+                            <span class="material-symbols-outlined text-primary-fixed text-6xl neon-pulse block mb-4">location_on</span>
+                            <div class="font-headline-md text-headline-md text-primary-fixed uppercase">Apex Badminton Complex</div>
+                            <div class="text-on-surface-variant mt-2">Quận 1, TP.HCM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+    </main>
+ 
+    <footer class="bg-surface-container-lowest border-t border-white/5 w-full py-12 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-gutter">
+        <div class="flex flex-col items-center md:items-start gap-4">
+            <div class="font-headline-md text-headline-md font-bold text-primary uppercase">Apex Badminton Store</div>
+            <p class="text-on-surface-variant/60">© 2024 Apex Store. Equipping the Elite.</p>
+        </div>
+        <div class="flex gap-8">
+            <a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Support</a>
+            <a class="text-on-surface-variant/60 hover:text-primary transition-colors uppercase text-sm" href="#">Warranty</a>
+        </div>
+    </footer>
+ 
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 z-[1200] hidden items-center justify-center bg-black/80 backdrop-blur-md px-4">
+        <div class="relative z-10 w-full max-w-md modal-glass rounded-2xl p-8 fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-headline-lg text-headline-lg uppercase text-primary-fixed">Đặt Sân</h2>
+                    <p id="bookingCourtName" class="text-on-surface-variant text-sm mt-1"></p>
+                </div>
+                <button onclick="closeBookingModal()" class="text-white/60 hover:text-white text-2xl material-symbols-outlined">close</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Ngày Đặt</label>
+                    <input type="date" class="input-dark w-full px-4 py-3 rounded-lg text-on-surface" id="bookDate" />
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Khung Giờ</label>
+                    <select class="input-dark w-full px-4 py-3 rounded-lg text-on-surface">
+                        <option value="">Chọn khung giờ...</option>
+                        <option>5:30 – 7:00</option>
+                        <option>7:00 – 8:30</option>
+                        <option>8:30 – 10:00</option>
+                        <option>14:00 – 15:30</option>
+                        <option>15:30 – 17:00</option>
+                        <option>17:00 – 18:30</option>
+                        <option>19:00 – 20:30</option>
+                        <option>20:30 – 22:00</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Số Người</label>
+                    <select class="input-dark w-full px-4 py-3 rounded-lg text-on-surface">
+                        <option>2 người</option>
+                        <option>4 người</option>
+                        <option>6 người</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Ghi Chú</label>
+                    <textarea class="input-dark w-full px-4 py-3 rounded-lg text-on-surface resize-none" rows="2" placeholder="Yêu cầu đặc biệt..."></textarea>
+                </div>
+            </div>
+            <button onclick="confirmBooking()" class="w-full mt-6 bg-primary-fixed text-on-primary py-4 font-headline-md font-bold uppercase tracking-widest hover:brightness-110 transition-all rounded-lg shadow-[0_0_20px_rgba(171,214,0,0.3)]">Xác Nhận Đặt Sân</button>
+        </div>
+    </div>
+ 
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-[1200] hidden items-center justify-center bg-black/80 backdrop-blur-md px-4">
+        <div class="relative z-10 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="font-headline-lg text-headline-lg text-primary neon-pulse">APEX</h1>
+                <p class="text-on-surface-variant">Đăng nhập để tiếp tục</p>
+            </div>
+            <div class="flex gap-4 mb-6 glass-card p-1">
+                <button id="modalLoginTab" class="flex-1 py-3 px-4 font-headline-md text-headline-md rounded-lg transition-all duration-300 bg-primary-fixed text-on-primary">Đăng Nhập</button>
+                <button id="modalRegisterTab" class="flex-1 py-3 px-4 font-headline-md text-headline-md rounded-lg transition-all duration-300 text-on-surface-variant">Đăng Ký</button>
+            </div>
+            <div id="modalLoginForm" class="glass-card p-8 space-y-6 fade-in">
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Email</label><input type="text" id="modalEmail" class="input-dark w-full px-4 py-3 rounded-lg" placeholder="example@apex.com"></div>
+                <div><label class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">Mật Khẩu</label><input type="password" id="modalPassword" class="input-dark w-full px-4 py-3 rounded-lg" placeholder="••••••••"></div>
+                <button id="doModalLogin" class="w-full bg-primary-fixed text-on-primary px-6 py-3 font-headline-md font-bold uppercase tracking-widest hover:brightness-110 transition-all rounded-lg shadow-[0_0_20px_rgba(171,214,0,0.3)]">Đăng Nhập</button>
+            </div>
+            <div id="modalRegisterForm" class="glass-card p-8 space-y-5 fade-in hidden">
+                <input type="text" id="regFullName" placeholder="Họ và tên" class="input-dark w-full px-4 py-3 rounded-lg">
+                <input type="email" id="regEmail" placeholder="Email" class="input-dark w-full px-4 py-3 rounded-lg">
+                <input type="password" id="regPassword" placeholder="Mật khẩu (6+ ký tự)" class="input-dark w-full px-4 py-3 rounded-lg">
+                <button id="doModalRegister" class="w-full bg-primary-fixed text-on-primary px-6 py-3 font-headline-md font-bold uppercase tracking-widest hover:brightness-110 transition-all rounded-lg shadow-[0_0_20px_rgba(171,214,0,0.3)]">Tạo Tài Khoản</button>
+            </div>
+            <button id="closeAuthModal" class="absolute top-4 right-4 text-white/60 hover:text-white text-2xl">&times;</button>
+        </div>
+    </div>
+ 
+    <!-- Profile Modal -->
+    <div id="profileModal" class="fixed inset-0 z-[1100] hidden items-center justify-center bg-black/70 backdrop-blur-sm">
+        <div class="modal-glass rounded-3xl w-[90%] max-w-lg p-6 border border-[#abd600]/30 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-xl font-bold flex items-center gap-2"><span class="material-symbols-outlined text-[#abd600]">account_circle</span> Hồ sơ thành viên</h3>
+                <span id="closeProfileBtn" class="material-symbols-outlined cursor-pointer hover:text-[#abd600]">close</span>
+            </div>
+            <div id="profileContent" class="py-5 space-y-4"></div>
+            <button id="logoutFromProfileBtn" class="w-full mt-2 border border-red-500/50 text-red-400 py-2 rounded-xl hover:bg-red-500/20 transition">Đăng xuất</button>
+        </div>
+    </div>
+ 
+    <div id="toastMsg" class="toast-msg">✨ Thông báo</div>
+ 
+    <script>
+    (function() {
+        let currentUser = null;
+        let isLoggedIn = false;
+        let pendingAction = null;
+ 
+        // --- Auth helpers ---
+        function saveUsers(u) { localStorage.setItem('apex_users', JSON.stringify(u)); }
+        function loadUsers() { return JSON.parse(localStorage.getItem('apex_users') || '[]'); }
+        function saveCurrentUser() {
+            if (currentUser) { localStorage.setItem('apex_currentUser', JSON.stringify(currentUser)); localStorage.setItem('apex_loggedIn', 'true'); }
+            else { localStorage.removeItem('apex_currentUser'); localStorage.setItem('apex_loggedIn', 'false'); }
+        }
+        function getRankFromUser(user) {
+            const spent = user?.totalSpent || 0;
+            if (spent >= 30000000) return { name: "Diamond", icon: "diamond" };
+            if (spent >= 15000000) return { name: "Gold", icon: "workspace_premium" };
+            if (spent >= 5000000) return { name: "Silver", icon: "stars" };
+            return { name: "Bronze", icon: "emoji_events" };
+        }
+        function login(email, password) {
+            const users = loadUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) { currentUser = user; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Chào ${user.fullName}!`); return true; }
+            return false;
+        }
+        function register(fullName, email, password) {
+            let users = loadUsers();
+            if (users.find(u => u.email === email)) { showToast("Email đã tồn tại!", true); return false; }
+            const newUser = { id: Date.now(), fullName, email, password, totalSpent: 0, totalOrders: 0 };
+            users.push(newUser); saveUsers(users); currentUser = newUser; isLoggedIn = true; saveCurrentUser(); renderNavbarAvatar(); showToast(`Đăng ký thành công!`); return true;
+        }
+        function logout() { isLoggedIn = false; currentUser = null; saveCurrentUser(); renderNavbarAvatar(); document.getElementById('profileModal').classList.add('hidden'); }
+ 
+        function renderNavbarAvatar() {
+            const container = document.getElementById('userNavSection');
+            if (isLoggedIn && currentUser) {
+                const letter = currentUser.fullName?.charAt(0).toUpperCase() || 'U';
+                const rank = getRankFromUser(currentUser);
+                container.innerHTML = `<div class="flex items-center gap-2"><span class="rank-badge"><span class="material-symbols-outlined text-sm">${rank.icon}</span> ${rank.name}</span><div class="user-avatar-circle" id="avatarBtn">${letter}</div></div>`;
+                document.getElementById('avatarBtn').onclick = showProfileModal;
+            } else {
+                container.innerHTML = `<button id="openAuthNavBtn" class="bg-primary-container text-on-primary px-6 py-2 font-label-sm text-label-sm font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-200 shadow-[0_0_15px_rgba(171,214,0,0.4)]">Sign In</button>`;
+                document.getElementById('openAuthNavBtn').onclick = openAuthModal;
+            }
+        }
+        function showProfileModal() {
+            if (!currentUser) return;
+            const rank = getRankFromUser(currentUser);
+            document.getElementById('profileContent').innerHTML = `<div class="flex items-center gap-4"><div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#abd600] to-[#6b8c00] flex items-center justify-center text-3xl font-black text-black">${currentUser.fullName.charAt(0)}</div><div><h2 class="text-2xl font-bold">${currentUser.fullName}</h2><div class="text-white/50">${currentUser.email}</div></div></div><div class="grid grid-cols-2 gap-3"><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${(currentUser.totalSpent||0).toLocaleString()}₫</div><div class="text-xs text-white/40 mt-1">Tổng chi tiêu</div></div><div class="bg-white/5 p-3 rounded-xl"><div class="text-[#abd600] font-bold">${rank.name}</div><div class="text-xs text-white/40 mt-1">Hạng thành viên</div></div></div>`;
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('profileModal').classList.add('flex');
+        }
+        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); document.getElementById('authModal').classList.add('flex'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('authModal').classList.remove('flex'); }
+ 
+        // --- Toast ---
+        window.showToast = function(msg, isErr = false) {
+            const toast = document.getElementById('toastMsg');
+            toast.innerText = isErr ? `⚠️ ${msg}` : `✨ ${msg}`;
+            toast.style.background = isErr ? '#8b2c2c' : '#1e2a1a';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        };
+ 
+        // --- Courts filter ---
+        window.filterCourts = function(type) {
+            ['all','available','premium'].forEach(t => {
+                const btn = document.getElementById('tab-' + t);
+                btn.classList.remove('tab-active', 'tab-inactive');
+                btn.classList.add(t === type ? 'tab-active' : 'tab-inactive');
+            });
+            document.querySelectorAll('#courtsGrid .court-card').forEach(card => {
+                if (type === 'all') { card.style.display = ''; return; }
+                card.style.display = card.dataset.type === type ? '' : 'none';
+            });
+        };
+ 
+        // --- Booking Modal ---
+        let bookingCourtName = '';
+        window.showBooking = function(name) {
+            if (!isLoggedIn) { pendingAction = () => showBooking(name); showToast('Vui lòng đăng nhập để đặt sân', true); openAuthModal(); return; }
+            bookingCourtName = name;
+            document.getElementById('bookingCourtName').innerText = name;
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookDate').min = today;
+            document.getElementById('bookDate').value = today;
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.getElementById('bookingModal').classList.add('flex');
+        };
+        window.closeBookingModal = function() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.getElementById('bookingModal').classList.remove('flex');
+        };
+        window.confirmBooking = function() {
+            closeBookingModal();
+            showToast(`✅ Đặt ${bookingCourtName} thành công! Kiểm tra email xác nhận.`);
+        };
+ 
+        // --- Groups ---
+        window.joinGroup = function(name) {
+            if (!isLoggedIn) { pendingAction = () => joinGroup(name); showToast('Vui lòng đăng nhập để tham gia nhóm', true); openAuthModal(); return; }
+            showToast(`🏸 Bạn đã gửi yêu cầu tham gia nhóm ${name}!`);
+        };
+        window.joinWaitlist = function(name) {
+            if (!isLoggedIn) { pendingAction = () => joinWaitlist(name); showToast('Vui lòng đăng nhập để đăng ký chờ', true); openAuthModal(); return; }
+            showToast(`📋 Bạn đã vào danh sách chờ nhóm ${name}. Chúng tôi sẽ liên hệ sớm!`);
+        };
+        window.showCreateGroup = function() {
+            if (!isLoggedIn) { pendingAction = showCreateGroup; showToast('Vui lòng đăng nhập để tạo nhóm', true); openAuthModal(); return; }
+            showToast('🚀 Tính năng tạo nhóm đang được phát triển. Vui lòng liên hệ hotline!');
+        };
+ 
+        // --- Scroll helpers ---
+        window.scrollToCourts = function() { document.getElementById('courts-section').scrollIntoView({ behavior: 'smooth' }); };
+        window.scrollToGroups = function() { document.getElementById('groups-section').scrollIntoView({ behavior: 'smooth' }); };
+ 
+        // --- Tab events ---
+        document.getElementById('modalLoginTab').onclick = () => {
+            document.getElementById('modalLoginForm').classList.remove('hidden');
+            document.getElementById('modalRegisterForm').classList.add('hidden');
+            document.getElementById('modalLoginTab').classList.add('bg-primary-fixed','text-on-primary');
+            document.getElementById('modalRegisterTab').classList.remove('bg-primary-fixed','text-on-primary');
+        };
+        document.getElementById('modalRegisterTab').onclick = () => {
+            document.getElementById('modalRegisterForm').classList.remove('hidden');
+            document.getElementById('modalLoginForm').classList.add('hidden');
+            document.getElementById('modalRegisterTab').classList.add('bg-primary-fixed','text-on-primary');
+            document.getElementById('modalLoginTab').classList.remove('bg-primary-fixed','text-on-primary');
+        };
+        document.getElementById('doModalLogin').onclick = () => {
+            if (login(document.getElementById('modalEmail').value, document.getElementById('modalPassword').value)) {
+                closeAuthModal();
+                if (pendingAction) { setTimeout(() => { pendingAction(); pendingAction = null; }, 300); }
+            } else { showToast("Sai thông tin đăng nhập", true); }
+        };
+        document.getElementById('doModalRegister').onclick = () => {
+            if (register(document.getElementById('regFullName').value, document.getElementById('regEmail').value, document.getElementById('regPassword').value)) {
+                closeAuthModal();
+                if (pendingAction) { setTimeout(() => { pendingAction(); pendingAction = null; }, 300); }
+            }
+        };
+        document.getElementById('closeAuthModal').onclick = closeAuthModal;
+        document.getElementById('closeProfileBtn').onclick = () => document.getElementById('profileModal').classList.add('hidden');
+        document.getElementById('logoutFromProfileBtn').onclick = logout;
+ 
+        // --- Init ---
+        const saved = JSON.parse(localStorage.getItem('apex_currentUser'));
+        if (saved && localStorage.getItem('apex_loggedIn') === 'true') { currentUser = saved; isLoggedIn = true; }
+        renderNavbarAvatar();
+    })();
+    </script>
+</body>
+</html>

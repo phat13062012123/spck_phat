@@ -66,15 +66,24 @@
             padding: 12px 24px; border-radius: 60px; color: white; z-index: 1200;
             transform: translateX(450px); transition: transform 0.25s; font-weight: 500;
         }
+
         .toast-msg.show { transform: translateX(0); }
         .modal-glass {
             background: rgba(20, 20, 25, 0.98); backdrop-filter: blur(12px); border: 1px solid #abd60030;
         }
         .input-dark {
             background: rgba(30, 30, 30, 0.8); border: 1px solid rgba(171, 214, 0, 0.2);
-            transition: all 0.3s ease; color: white;
+            transition: all 0.3s ease; color: rgb(255, 255, 255);
         }
+        
         .input-dark:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
+        
+        .input-light {
+            background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(171, 214, 0, 0.2);
+            transition: all 0.3s ease; color: rgb(0, 0, 0);
+        }
+        
+        .input-light:focus { border-color: rgba(171, 214, 0, 0.6); box-shadow: 0 0 15px rgba(171, 214, 0, 0.2); outline: none; }
         
         /* Support Page Styles */
         .support-card {
